@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Strengthen Numbers</string>
+
+    //Button Text
+
+    <string name="btn_txt_next">Next</string>
+
+    //TextView Text
+    <string name="txt_title1_experience_culture">Experience the Culture</string>
+    <string name="txt_title_2post_workout">Post Workouts, Tips &amp;\n Progress</string>
+    <string name="txt_title_3join_fitness">Join Fitness events</string>
+    <string name="txt_desc_1join_community">Join the community that will fuel your passion for health and fitness by supporting each steps of your journey</string>
+    <string name="txt_desc_2motivate_inspire">Motivate and inspire others by sharing workouts, tips and tricks, or progress updates with pictures and videos. Feel free to draw some inspiration from others doing the same</string>
+    <string name="txt_desc_3attending_group">Whether its attending a local group event, traveling out of state to a big seminar, or inviting friends to go through that tough workout with you, the events page will help you achieve your goals</string>
+</resources>
