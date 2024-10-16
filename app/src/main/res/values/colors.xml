@@ -5,4 +5,9 @@
     <color name="surface_white">#F3F7F7</color>
     <color name="background_primary_greenshade">#F1FCE9</color>
     <color name="button_primary_foreground">#273B3C</color>
+    <color name="text_color">#1A1A1A</color>
+    <color name="text_color_t30">#4D4D4D</color>
+    <color name="edittext_color_s70">#A2C1C3</color>
+    <color name="unselected_dot_color">#E0EAEB</color>
+    <color name="button_disable">#E6E6E6</color>
 </resources>

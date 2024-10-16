@@ -1,4 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name ="text_size">20dp</dimen>
+    <dimen name ="txt_btn_size">16sp</dimen>
+    <dimen name="title_txt_size">24sp</dimen>
+    <dimen name="regular_text_size">16sp</dimen>
+    <dimen name="H4">32sp</dimen>
+    <dimen name="H5">24sp</dimen>
 </resources>
