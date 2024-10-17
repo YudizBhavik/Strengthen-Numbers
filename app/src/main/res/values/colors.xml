@@ -11,4 +11,5 @@
     <color name="S90">#E0EAEB</color>
     <color name="unselected_dot_color">#E0EAEB</color>
     <color name="button_disable">#E6E6E6</color>
+    <color name="snackbar_true">#76DE21</color>
 </resources>

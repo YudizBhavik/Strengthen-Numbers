@@ -6,7 +6,7 @@
     <string name="btn_txt_next">Next</string>
     <string name="btn_txt_continue">Continue</string>
     <string name="btn_txt_skip">Skip</string>
-
+    <string name="btn_verify">Verify</string>
 
     //TextView Text
     <string name="txt_title1_experience_culture">Experience the Culture</string>
@@ -23,6 +23,10 @@
     <string name="txt_otp_verification">OTP Verification</string>
     <string name="txt_send_code">We have sent the verification code to your\n$my number$ mobile number.</string>
     <string name="didn_t_receive_code">Didn’t receive OTP? 30 seconds</string>
-    <string name="btn_verify">Verify</string>
     <string name="txt_resend_otp">Resend OTP</string>
+    <string name="txt_allow_access_nlocation">Allow access to your\nlocation</string>
+    <string name="txt_location_line1">Discover nearby fitness events and group workouts happening in your area.</string>
+    <string name="txt_location_line2">Find friends who are crushing their goals near you.</string>
+    <string name="btn_txt_don_t_allow">Don\'t Allow</string>
+    <string name="btn_txt_allow">Allow</string>
 </resources>

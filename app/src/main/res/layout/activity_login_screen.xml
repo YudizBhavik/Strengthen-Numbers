@@ -60,29 +60,31 @@
             android:id="@+id/edit_mobile_number"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:fontFamily="@font/manrope_regular"
             android:inputType="number"
             android:background="@android:color/transparent"
             android:hint="@string/txt_mobile_number"
-            android:maxLength="10"
+            android:maxLength="13"
             android:maxLines="1"
             android:paddingHorizontal="20dp"
             android:textColorHint="@color/black"
             android:textColor="@color/black" />
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_continue"
         android:layout_width="343dp"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:textSize="15sp"
         android:layout_centerHorizontal="true"
         android:text="@string/btn_txt_continue"
+        android:backgroundTint="@color/S19"
+        app:cornerRadius="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear_edittext"
-        android:background="@drawable/style_button"/>
+        app:layout_constraintTop_toBottomOf="@id/linear_edittext" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
