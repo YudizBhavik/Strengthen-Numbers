@@ -3,15 +3,103 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OnBoardingScreen">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/onboard_viewpager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="H,390:500" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="0dp"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/ic_view_onboarding_bg"
+        app:layout_constraintDimensionRatio="H,480:500">
+
+        <TextView
+            android:id="@+id/txt_onboarding_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="5dp"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="@dimen/title_txt_size"
+            android:text="@string/txt_title"/>
+        <TextView
+            android:id="@+id/txt_onboarding_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="50dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/manrope_regular"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:textSize="@dimen/regular_text_size"
+            android:text="@string/txt_description"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="30dp">
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/circle_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="55dp"
+                app:ci_drawable="@drawable/dot_active"
+                app:ci_height="8dp"
+                app:ci_width="8dp"
+                app:ci_drawable_unselected="@drawable/dot_inactive"
+                app:ci_orientation="horizontal" />
+            <TextView
+                android:id="@+id/txt_btn_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="15dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:textColor="@color/text_color"
+                android:fontFamily="@font/manrope_semibold"
+                android:text="@string/btn_txt_skip"
+                android:textAlignment="center"
+                android:textSize="@dimen/txt_btn_size"
+                tools:ignore="TouchTargetSizeCheck" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_next"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/S19"
+                app:cornerRadius="12dp"
+                android:textColor="@color/white"
+                android:text="@string/btn_txt_next"
+                style="@style/Widget.Material3.Button"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

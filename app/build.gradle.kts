@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    implementation ("com.tbuonomo:dotsindicator:5.0")
+    implementation ("me.relex:circleindicator:2.1.6")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -78,7 +78,7 @@ class OtpVerificationScreen : AppCompatActivity() {
             override fun onFinish() {
                 txtDidNotReceive.text = "Didn’t receive OTP? 0 secs"
                 txtResend.isEnabled = true
-                txtResend.setTextColor(resources.getColor(R.color.button_primary_foreground, theme))
+                txtResend.setTextColor(resources.getColor(R.color.S19, theme))
             }
         }.start()
     }
