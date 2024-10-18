@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var editMobileNumber: EditText
     private lateinit var btnContinue: MaterialButton
     private lateinit var tvErrorMessage: TextView
+    private lateinit var progressBar: ProgressBar
     private val prefix = "+1"
     private var isPrefixShown = false
 
@@ -35,6 +37,7 @@ class LoginScreen : AppCompatActivity() {
         editMobileNumber = findViewById(R.id.edit_mobile_number)
         btnContinue = findViewById(R.id.btn_continue)
         tvErrorMessage = findViewById(R.id.tv_error_message)
+        progressBar = findViewById(R.id.progress_bar)
 
         editMobileNumber.hint = "Mobile Number"
         editMobileNumber.setOnFocusChangeListener { _, hasFocus ->
@@ -66,11 +69,13 @@ class LoginScreen : AppCompatActivity() {
         btnContinue.setOnClickListener {
             val phoneNumber = editMobileNumber.text.toString().trim()
             if (isValidPhoneNumber(phoneNumber)) {
-                hidekeyboard()
+                hideKeyboard()
+                showProgressBar(true)
                 showSnackbar("One-Time Password(OTP) has been sent successfully") {
                     val fullPhoneNumber = phoneNumber
                     val intent = Intent(this, OtpVerificationScreen::class.java)
                     intent.putExtra("PHONE_NUMBER", fullPhoneNumber)
+                    showProgressBar(false) // Hide progress bar  before starting new activity
                     startActivity(intent)
                 }
             } else {
@@ -97,10 +102,10 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun validPhonenumber(): String? {
-        val phonenumber = editMobileNumber.text.toString().trim()
+        val phoneNumber = editMobileNumber.text.toString().trim()
         return when {
-            phonenumber.isEmpty() -> "Please enter a valid phone number"
-            phonenumber.length < 12 -> "Enter Valid Phone Number"
+            phoneNumber.isEmpty() -> "Please enter a valid phone number"
+            phoneNumber.length < 12 -> "Enter Valid Phone Number"
             else -> null
         }
     }
@@ -121,13 +126,21 @@ class LoginScreen : AppCompatActivity() {
         snackbar.show()
     }
 
-    private fun hidekeyboard(){
+    private fun showProgressBar(show: Boolean) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        btnContinue.isEnabled = !show
+        if (show) {
+            btnContinue.text = ""
+        } else {
+            btnContinue.text = getString(R.string.btn_txt_continue)
+        }
+    }
+
+    private fun hideKeyboard() {
         val view: View? = this.currentFocus
         if (view != null) {
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 }

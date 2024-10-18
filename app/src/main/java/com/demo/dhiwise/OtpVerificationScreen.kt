@@ -20,6 +20,7 @@ import android.graphics.Typeface
 import android.os.CountDownTimer
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +36,7 @@ class OtpVerificationScreen : AppCompatActivity() {
     private lateinit var edit_otp_3: EditText
     private lateinit var edit_otp_4: EditText
     private lateinit var tv_otp_error_message: TextView
+    private lateinit var progressBar: ProgressBar
 
     private val resendOtpMessage = "Didn’t receive OTP? %d secs"
     private var countDownTimer: CountDownTimer? = null
@@ -82,8 +84,11 @@ class OtpVerificationScreen : AppCompatActivity() {
         btn_verify.setOnClickListener {
             if (isOtpValid()) {
                 hideKeyboard()
+                showProgressBar(true)
                 val successIntent = Intent(this, LocationPermissionScreen::class.java)
-                showSnackbar("Successfully logged in.", successIntent) {}
+                showSnackbar("Successfully logged in.", successIntent) {
+                    showProgressBar(false)
+                }
             } else {
                 showError("Please enter a 4-digit OTP")
             }
@@ -97,6 +102,7 @@ class OtpVerificationScreen : AppCompatActivity() {
         txtDidNotReceive = findViewById(R.id.txt_did_not_received)
         txtResend = findViewById(R.id.txt_resend)
 
+        progressBar = findViewById(R.id.progress_bar_verify)
         startTimer()
 
         txtResend.setOnClickListener { startTimer() }
@@ -151,7 +157,7 @@ class OtpVerificationScreen : AppCompatActivity() {
         snackbar.addCallback(object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
-                startActivity(intent) // Navigate to the next screen
+                startActivity(intent)
                 onDismissed()
             }
         })
@@ -165,6 +171,15 @@ class OtpVerificationScreen : AppCompatActivity() {
             val inputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+    private fun showProgressBar(show: Boolean) {
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        btn_verify.isEnabled = !show
+        if (show) {
+            btn_verify.text = ""
+        } else {
+            btn_verify.text = getString(R.string.btn_txt_continue)
         }
     }
 }

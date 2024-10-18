@@ -185,6 +185,18 @@
         app:layout_constraintTop_toBottomOf="@id/txt_resend"
         tools:ignore="VisualLintButtonSize" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar_verify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintTop_toTopOf="@id/btn_verify"
+        app:layout_constraintBottom_toBottomOf="@id/btn_verify"
+        app:layout_constraintEnd_toEndOf="@id/btn_verify"
+        app:layout_constraintStart_toStartOf="@id/btn_verify" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
