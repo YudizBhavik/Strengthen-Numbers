@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,6 +22,7 @@ class LoginScreen : AppCompatActivity() {
 
     private lateinit var editMobileNumber: EditText
     private lateinit var btnContinue: MaterialButton
+    private lateinit var tvErrorMessage: TextView
     private val prefix = "+1"
     private var isPrefixShown = false
 
@@ -31,9 +34,10 @@ class LoginScreen : AppCompatActivity() {
 
         editMobileNumber = findViewById(R.id.edit_mobile_number)
         btnContinue = findViewById(R.id.btn_continue)
+        tvErrorMessage = findViewById(R.id.tv_error_message)
 
         editMobileNumber.hint = "Mobile Number"
-        editMobileNumber.setOnFocusChangeListener { v, hasFocus ->
+        editMobileNumber.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 if (!isPrefixShown) {
                     editMobileNumber.setText(prefix)
@@ -53,6 +57,7 @@ class LoginScreen : AppCompatActivity() {
                     editMobileNumber.setText(prefix)
                     editMobileNumber.setSelection(prefix.length)
                 }
+                tvErrorMessage.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -60,7 +65,8 @@ class LoginScreen : AppCompatActivity() {
 
         btnContinue.setOnClickListener {
             val phoneNumber = editMobileNumber.text.toString().trim()
-            if (phoneNumber.isNotEmpty() && phoneNumber.startsWith(prefix)) {
+            if (isValidPhoneNumber(phoneNumber)) {
+                hidekeyboard()
                 showSnackbar("One-Time Password(OTP) has been sent successfully") {
                     val fullPhoneNumber = phoneNumber
                     val intent = Intent(this, OtpVerificationScreen::class.java)
@@ -68,7 +74,7 @@ class LoginScreen : AppCompatActivity() {
                     startActivity(intent)
                 }
             } else {
-                editMobileNumber.error = "Please enter your mobile number"
+                displayErrorMessage(validPhonenumber())
             }
         }
 
@@ -76,6 +82,26 @@ class LoginScreen : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        return phoneNumber.isNotEmpty() && phoneNumber.startsWith(prefix) && phoneNumber.length == 12
+    }
+
+    private fun displayErrorMessage(message: String?) {
+        if (message != null) {
+            tvErrorMessage.text = message
+            tvErrorMessage.visibility = View.VISIBLE
+        }
+    }
+
+    private fun validPhonenumber(): String? {
+        val phonenumber = editMobileNumber.text.toString().trim()
+        return when {
+            phonenumber.isEmpty() -> "Please enter a valid phone number"
+            phonenumber.length < 12 -> "Enter Valid Phone Number"
+            else -> null
         }
     }
 
@@ -93,5 +119,15 @@ class LoginScreen : AppCompatActivity() {
         })
 
         snackbar.show()
+    }
+
+    private fun hidekeyboard(){
+        val view: View? = this.currentFocus
+        if (view != null) {
+            val inputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
+
+        }
     }
 }
