@@ -1,4 +1,4 @@
-package com.demo.dhiwise
+package com.demo.dhiwise.view.ui
 
 import android.os.Bundle
 import android.content.Intent
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.button.MaterialButton
 import android.widget.TextView
+import com.demo.dhiwise.R
 import me.relex.circleindicator.CircleIndicator
 import com.demo.dhiwise.view.adapter.ViewPagerAdapter
 

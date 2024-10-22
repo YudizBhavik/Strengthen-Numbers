@@ -1,4 +1,4 @@
-package com.demo.dhiwise
+package com.demo.dhiwise.view.ui
 
 import android.content.Intent
 import android.graphics.Color
@@ -21,6 +21,7 @@ import android.os.CountDownTimer
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
+import com.demo.dhiwise.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -72,7 +73,7 @@ class OtpVerificationScreen : AppCompatActivity() {
         edit_otp_3.addTextChangedListener(textWatcher)
         edit_otp_4.addTextChangedListener(textWatcher)
 
-        val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+        val phoneNumber = intent.getStringExtra("contact_number") ?: ""
         val message = "We have sent the verification code to your\n$phoneNumber mobile number."
         val spannableString = SpannableString(message)
         val start = message.indexOf(phoneNumber)
@@ -153,7 +154,6 @@ class OtpVerificationScreen : AppCompatActivity() {
             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
             .setDuration(1500)
             .setBackgroundTint(Color.parseColor("#5FB21A"))
-
         snackbar.addCallback(object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)
@@ -161,7 +161,6 @@ class OtpVerificationScreen : AppCompatActivity() {
                 onDismissed()
             }
         })
-
         snackbar.show()
     }
 

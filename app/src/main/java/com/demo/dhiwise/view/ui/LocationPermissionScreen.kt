@@ -1,20 +1,18 @@
-package com.demo.dhiwise
+package com.demo.dhiwise.view.ui
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.demo.dhiwise.R
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 class LocationPermissionScreen : AppCompatActivity() {
 
@@ -49,7 +47,7 @@ class LocationPermissionScreen : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
-            intent = Intent(this,ProfileSetupScreen1::class.java)
+            intent = Intent(this, ProfileSetupScreen1::class.java)
             startActivity(intent)
         }
     }

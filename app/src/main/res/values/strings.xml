@@ -43,4 +43,6 @@
     <string name="txt_i_agree_TC"><![CDATA[I agree all terms & conditions.]]></string>
     <string name="txt_18plus_old">Yes I am 18+ years old.</string>
     <string name="txt_choose_minimum_3">Choose minimum 3 interests.</string>
+    <string name="txt_fitness_level">Fitness Level</string>
+    <string name="txt_previous">Previous</string>
 </resources>

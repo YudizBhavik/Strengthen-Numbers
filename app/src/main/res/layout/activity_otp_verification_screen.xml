@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OtpVerificationScreen">
+    tools:context=".view.ui.OtpVerificationScreen">
 
     <ImageButton
         android:id="@+id/back_icon"

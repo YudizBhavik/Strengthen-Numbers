@@ -1,20 +1,24 @@
-package com.demo.dhiwise
+package com.demo.dhiwise.view.ui
 
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.demo.dhiwise.R
+import com.demo.dhiwise.viewmodel.OtpViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -27,6 +31,8 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private val prefix = "+1"
     private var isPrefixShown = false
+    private val otpViewModel: OtpViewModel by viewModels()
+    private lateinit var phoneNumber: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +47,10 @@ class LoginScreen : AppCompatActivity() {
 
         editMobileNumber.hint = "Mobile Number"
         editMobileNumber.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                if (!isPrefixShown) {
-                    editMobileNumber.setText(prefix)
-                    editMobileNumber.setSelection(prefix.length)
-                    isPrefixShown = true
-                }
+            if (hasFocus && !isPrefixShown) {
+                editMobileNumber.setText(prefix)
+                editMobileNumber.setSelection(prefix.length)
+                isPrefixShown = true
             } else {
                 isPrefixShown = false
             }
@@ -54,7 +58,6 @@ class LoginScreen : AppCompatActivity() {
 
         editMobileNumber.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString() != prefix && !s.toString().startsWith(prefix)) {
                     editMobileNumber.setText(prefix)
@@ -62,24 +65,35 @@ class LoginScreen : AppCompatActivity() {
                 }
                 tvErrorMessage.visibility = View.GONE
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
         btnContinue.setOnClickListener {
-            val phoneNumber = editMobileNumber.text.toString().trim()
+            phoneNumber = editMobileNumber.text.toString().trim()
             if (isValidPhoneNumber(phoneNumber)) {
                 hideKeyboard()
                 showProgressBar(true)
-                showSnackbar("One-Time Password(OTP) has been sent successfully") {
-                    val fullPhoneNumber = phoneNumber
-                    val intent = Intent(this, OtpVerificationScreen::class.java)
-                    intent.putExtra("PHONE_NUMBER", fullPhoneNumber)
-                    showProgressBar(false) // Hide progress bar  before starting new activity
-                    startActivity(intent)
-                }
+                otpViewModel.requestOtp(phoneNumber)
             } else {
                 displayErrorMessage(validPhonenumber())
+            }
+        }
+
+        otpViewModel.otpResponse.observe(this) { response ->
+            showProgressBar(false)
+            if (response != null) {
+                if (response.meta.message == "One-Time Password (OTP) has been sent successfully.") {
+                    showSnackbar(response.meta.message) {
+                        val intent = Intent(this, OtpVerificationScreen::class.java)
+                        intent.putExtra("contact_number", phoneNumber)
+                        startActivity(intent)
+                    }
+                } else {
+                    displayErrorMessage(response.meta.message)
+                }
+            } else {
+                Log.e("LoginScreen", "OTP response is null.")
+                displayErrorMessage("Failed to send OTP. Please try again.")
             }
         }
 
@@ -129,11 +143,7 @@ class LoginScreen : AppCompatActivity() {
     private fun showProgressBar(show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
         btnContinue.isEnabled = !show
-        if (show) {
-            btnContinue.text = ""
-        } else {
-            btnContinue.text = getString(R.string.btn_txt_continue)
-        }
+        btnContinue.text = if (show) "" else getString(R.string.btn_txt_continue)
     }
 
     private fun hideKeyboard() {

@@ -6,35 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".FragmentProfileSetup1">
-
-    <TextView
-        android:id="@+id/txt_profile1_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="5dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:fontFamily="@font/manrope_bold"
-        android:textSize="@dimen/title_txt_size"
-        android:text="@string/txt_profile_setup"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/txt_profile1_desc"
-        android:layout_width="343dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:fontFamily="@font/manrope_regular"
-        android:textSize="@dimen/regular_text_size"
-        android:text="@string/txt_complete_the_fields"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txt_profile1_title"/>
+    tools:context=".view.ui.FragmentProfileSetup1">
 
     <LinearLayout
         android:id="@+id/linear_edittext_fullname"
@@ -42,8 +14,8 @@
         android:layout_height="65dp"
         android:background="@drawable/style_edittext"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintTop_toBottomOf="@id/txt_profile1_desc"
+        android:layout_marginTop="200dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" >
 
@@ -70,8 +42,8 @@
             app:hintAnimationEnabled="true"
             app:hintTextColor="@color/text_color"
             android:maxLines="1"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="0dp"
             app:cursorColor="@color/text_color_t30"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             app:hintEnabled="true"
@@ -88,7 +60,7 @@
     <LinearLayout
         android:id="@+id/linear_edittext_email"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="65dp"
         android:background="@drawable/style_edittext"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
@@ -108,24 +80,36 @@
             android:layout_marginStart="10dp"
             android:src="@drawable/style_line"/>
 
-        <EditText
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_email"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
             android:fontFamily="@font/manrope_regular"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             android:background="@android:color/transparent"
             android:hint="@string/txt_email"
+            app:hintAnimationEnabled="true"
+            app:hintTextColor="@color/text_color"
             android:maxLines="1"
-            android:paddingHorizontal="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="0dp"
+            app:cursorColor="@color/text_color_t30"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            app:hintEnabled="true"
             android:textColorHint="@color/black"
-            android:textColor="@color/black" />
+            android:textColor="@color/black" >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_edittext_DOB"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="65dp"
         android:background="@drawable/style_edittext"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="8dp"
@@ -145,18 +129,31 @@
             android:layout_marginStart="10dp"
             android:src="@drawable/style_line"/>
 
-        <EditText
-            android:id="@+id/edit_DOB"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_dob"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="match_parent"
             android:fontFamily="@font/manrope_regular"
             android:inputType="text"
             android:background="@android:color/transparent"
             android:hint="@string/txt_date_of_birth"
+            app:hintAnimationEnabled="true"
+            app:hintTextColor="@color/text_color"
             android:maxLines="1"
-            android:paddingHorizontal="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="2dp"
+            app:cursorColor="@color/text_color_t30"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            app:hintEnabled="true"
             android:textColorHint="@color/black"
-            android:textColor="@color/black" />
+            android:textColor="@color/black" >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_dob_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <com.google.android.material.checkbox.MaterialCheckBox
@@ -167,7 +164,7 @@
         android:text="@string/txt_i_agree_TC"
         android:textSize="@dimen/txt_btn_size"
         android:padding="7dp"
-        android:checked="true"
+        android:checked="false"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@id/linear_edittext_DOB"
         app:layout_constraintTop_toBottomOf="@id/linear_edittext_DOB"/>
@@ -179,9 +176,7 @@
         android:text="@string/txt_18plus_old"
         android:textSize="@dimen/txt_btn_size"
         android:padding="7dp"
-        android:checked="true"
-        android:buttonTint="@color/S19"
-
+        android:checked="false"
         android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="@id/linear_edittext_DOB"
         app:layout_constraintTop_toBottomOf="@id/t_c_checkBox1"/>

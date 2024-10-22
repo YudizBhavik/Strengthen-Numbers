@@ -38,7 +38,12 @@ android {
 
 dependencies {
     implementation ("me.relex:circleindicator:2.1.6")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
 
+    implementation(libs.androidx.hdodenhof)
+    implementation(libs.retrofit)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
