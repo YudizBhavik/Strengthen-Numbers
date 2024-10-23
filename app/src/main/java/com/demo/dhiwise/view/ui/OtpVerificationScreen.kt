@@ -3,25 +3,29 @@ package com.demo.dhiwise.view.ui
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.StyleSpan
+import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.graphics.Typeface
-import android.os.CountDownTimer
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
+import androidx.lifecycle.Observer
 import com.demo.dhiwise.R
+import com.demo.dhiwise.network.ApiResponse
+import com.demo.dhiwise.viewmodel.OtpViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +43,7 @@ class OtpVerificationScreen : AppCompatActivity() {
     private lateinit var tv_otp_error_message: TextView
     private lateinit var progressBar: ProgressBar
 
+    private val viewModel: OtpViewModel by viewModels()
     private val resendOtpMessage = "Didn’t receive OTP? %d secs"
     private var countDownTimer: CountDownTimer? = null
     private var timeLeftInMillis: Long = 30000
@@ -58,8 +63,9 @@ class OtpVerificationScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_otp_verification_screen)
+
+        enableEdgeToEdge()
 
         btn_verify = findViewById(R.id.btn_verify)
         edit_otp_1 = findViewById(R.id.edit_otp_1)
@@ -86,27 +92,68 @@ class OtpVerificationScreen : AppCompatActivity() {
             if (isOtpValid()) {
                 hideKeyboard()
                 showProgressBar(true)
-                val successIntent = Intent(this, LocationPermissionScreen::class.java)
-                showSnackbar("Successfully logged in.", successIntent) {
-                    showProgressBar(false)
-                }
+
+                val otp = "${edit_otp_1.text}${edit_otp_2.text}${edit_otp_3.text}${edit_otp_4.text}"
+                viewModel.verifyOtp(otp, phoneNumber)
             } else {
                 showError("Please enter a 4-digit OTP")
             }
         }
 
-        spannableString.setSpan(StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(StyleSpan(android.graphics.Typeface.BOLD), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         txtSentTheCode = findViewById(R.id.txt_sent_the_code)
         txtSentTheCode.text = spannableString
 
         txtDidNotReceive = findViewById(R.id.txt_did_not_received)
         txtResend = findViewById(R.id.txt_resend)
-
         progressBar = findViewById(R.id.progress_bar_verify)
-        startTimer()
 
+        startTimer()
         txtResend.setOnClickListener { startTimer() }
+
+//        viewModel.apiResponse.observe(this, Observer { response: ApiResponse? ->
+//            showProgressBar(false)
+//            response?.let {
+//                if (it.data != null) {
+//                    val successMessage = response.meta?.message
+//                    if (successMessage != null) {
+//                        showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)) {}
+//                    }
+//                } else {
+//                    Log.e("API Error", it.meta?.message ?: "Unknown error: ${response.toString()}")
+//
+//                    val errorMessage = response.meta?.message
+//                    if (errorMessage != null) {
+//                        showError(errorMessage)
+//                    }
+//                }
+//            } ?: run {
+//                val genericErrorMessage = "Unexpected error occurred."
+//                Log.e("API Error", genericErrorMessage)
+//                showError(genericErrorMessage)
+//            }
+//        })
+
+
+        viewModel.apiResponse.observe(this, Observer { response: ApiResponse? ->
+            showProgressBar(false)
+            if (response != null){
+                val successMessage = response.meta?.message
+                if (successMessage != null){
+                    showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)){}
+                }
+                else{
+                    val unsuccessMessage = response.meta?.message
+                    if (unsuccessMessage == null){
+                        if (unsuccessMessage != null) {
+                            showErrorSnackbar(unsuccessMessage){}
+                        }
+                    }
+                }
+            }
+        })
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -163,22 +210,31 @@ class OtpVerificationScreen : AppCompatActivity() {
         })
         snackbar.show()
     }
+    private fun showErrorSnackbar(message: String, onDismissed: () -> Unit) {
+        val snackbar = Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
+            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+            .setDuration(1500)
+            .setBackgroundTint(Color.parseColor("#5FB21A"))
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                onDismissed()
+            }
+        })
+        snackbar.show()
+    }
 
     private fun hideKeyboard() {
         val view: View? = this.currentFocus
         if (view != null) {
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
     private fun showProgressBar(show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
         btn_verify.isEnabled = !show
-        if (show) {
-            btn_verify.text = ""
-        } else {
-            btn_verify.text = getString(R.string.btn_txt_continue)
-        }
+        btn_verify.text = if (show) "" else getString(R.string.btn_txt_continue)
     }
 }

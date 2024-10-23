@@ -13,6 +13,7 @@ object ApiClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+
     private val client = OkHttpClient.Builder()
         .addInterceptor(logging)
         .build()

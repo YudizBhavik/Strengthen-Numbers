@@ -81,21 +81,27 @@ class LoginScreen : AppCompatActivity() {
 
         otpViewModel.otpResponse.observe(this) { response ->
             showProgressBar(false)
+
             if (response != null) {
-                if (response.meta.message == "One-Time Password (OTP) has been sent successfully.") {
-                    showSnackbar(response.meta.message) {
+                val apiMessage = response.meta?.message
+
+                if (apiMessage == "One-Time Password (OTP) has been sent successfully.") {
+                    showSnackbar(apiMessage!!) {
                         val intent = Intent(this, OtpVerificationScreen::class.java)
                         intent.putExtra("contact_number", phoneNumber)
                         startActivity(intent)
                     }
+                } else if (apiMessage != null) {
+                    displayErrorMessage(apiMessage)
                 } else {
-                    displayErrorMessage(response.meta.message)
+                    displayErrorMessage("nexpected errorrrrrrr occurred. Please try again.")
                 }
             } else {
                 Log.e("LoginScreen", "OTP response is null.")
                 displayErrorMessage("Failed to send OTP. Please try again.")
             }
         }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
