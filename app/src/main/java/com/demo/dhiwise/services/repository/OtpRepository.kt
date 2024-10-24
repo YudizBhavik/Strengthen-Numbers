@@ -3,8 +3,11 @@ package com.demo.dhiwise.repository
 import android.util.Log
 import com.demo.dhiwise.model.OtpRequest
 import com.demo.dhiwise.network.ApiResponse
+import com.demo.dhiwise.network.ProfileUpdateRequest
 import com.demo.dhiwise.services.api_service.ApiClient
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,10 +31,13 @@ class OtpRepository {
             }
         })
     }
+
     fun verifyOtp(request: OtpRequest, callback: (ApiResponse?, String?) -> Unit) {
         ApiClient.apiService.verifyOtp(request).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
+                    val token = response.headers().get("X-Authorization-Token").toString()
+                    Log.d("Token",token)
                     callback(response.body(), null)
                 } else {
                     val errorBody = response.errorBody()?.string()
@@ -69,5 +75,22 @@ class OtpRepository {
         })
     }
 
+    suspend fun updateProfile(request: ProfileUpdateRequest): ApiResponse? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = ApiClient.apiService.updateProfile(request).execute()
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("OtpRepository", "Error: ${response.code()} ${response.message()}")
+                    null
+                }
+            } catch (e: Exception) {
+                Log.e("OtpRepository", "Failure: ${e.message}")
+                null
+            }
+        }
+    }
 }
+
 

@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -19,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.demo.dhiwise.R
+import com.demo.dhiwise.viewmodel.OtpViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -42,6 +42,7 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        nextButton = findViewById(R.id.btn_next_profile_1)
 
         profile_title = findViewById(R.id.txt_profile_title)
         profile_desc = findViewById(R.id.txt_profile_desc)
@@ -54,14 +55,21 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         stepProgressBar = findViewById(R.id.stepProgressBar)
         updateStepProgress(1)
 
-        nextButton = findViewById(R.id.btn_next_profile_1)
+
         nextButton.setOnClickListener {
             val currentItem = viewPager.currentItem
-            if (currentItem < 2) {
-                viewPager.setCurrentItem(currentItem + 1, true)
+            if (currentItem == 0) {
+                val fragments: List<Fragment> = supportFragmentManager.fragments
+                val profileFragment = fragments[0] as FragmentProfileSetup1
+                profileFragment.updateProfile()
+            } else {
+                if (currentItem < 2) {
+                    viewPager.setCurrentItem(currentItem + 1, true)
+                }
             }
             onFragmentChanged(viewPager.currentItem)
         }
+
 
         txt_btn_previous.setOnClickListener {
             val currentItem = viewPager.currentItem
@@ -83,7 +91,6 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             }
         }
 
-        nextButton = findViewById(R.id.btn_next_profile_1)
         if (currentStep == 3) {
             nextButton.text = "Submit"
             profile_desc.text = "Choose minimum 3 interests."
@@ -132,6 +139,7 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
+
     private fun showProgressBar(show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
         nextButton.isEnabled = !show

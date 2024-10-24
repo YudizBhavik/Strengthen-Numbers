@@ -39,6 +39,7 @@ class OtpVerificationScreen : AppCompatActivity() {
     private lateinit var edit_otp_4: EditText
     private lateinit var tv_otp_error_message: TextView
     private lateinit var progressBar: ProgressBar
+    private lateinit var token :String
 
     private val viewModel: OtpViewModel by viewModels()
     private val resendOtpMessage = "Didn’t receive OTP? %d secs"
@@ -116,6 +117,8 @@ class OtpVerificationScreen : AppCompatActivity() {
             showProgressBar(false)
 
             if (response != null) {
+                val otpresponse = response.meta?.message
+                //token = result.headers().get("X-Authorization-Token").toString()
                 response.meta?.message?.let { successMessage ->
                     showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)) {}
                 } ?: showSnackbar("OTP verified successfully!", Intent(this, LocationPermissionScreen::class.java)) {}

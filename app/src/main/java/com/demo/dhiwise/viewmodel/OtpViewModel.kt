@@ -40,4 +40,34 @@ class OtpViewModel : ViewModel() {
             _otpResponse.postValue(response)
         }
     }
+
 }
+
+
+//package com.demo.dhiwise.viewmodel
+//
+//import androidx.lifecycle.LiveData
+//import androidx.lifecycle.MutableLiveData
+//import androidx.lifecycle.ViewModel
+//import com.demo.dhiwise.model.OtpRequest
+//import com.demo.dhiwise.network.ApiResponse
+//import com.demo.dhiwise.repository.OtpRepository
+//
+//class OtpViewModel : ViewModel() {
+//    private val repository = OtpRepository()
+//
+//    private val _apiResponse = MutableLiveData<ApiResponse?>()
+//    val apiResponse: LiveData<ApiResponse?> get() = _apiResponse
+//
+//    private val _errorMessage = MutableLiveData<String?>()
+//    val errorMessage: LiveData<String?> get() = _errorMessage
+//
+//    fun updateProfile(request: ProfileUpdateRequest) {
+//        repository.updateProfile(request) { response, error ->
+//            _apiResponse.postValue(response)
+//            if (error != null) {
+//                _errorMessage.postValue(error)
+//            }
+//        }
+//    }
+//}

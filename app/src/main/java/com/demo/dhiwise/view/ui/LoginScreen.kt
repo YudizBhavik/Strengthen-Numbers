@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.JsonToken
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -33,6 +34,7 @@ class LoginScreen : AppCompatActivity() {
     private var isPrefixShown = false
     private val otpViewModel: OtpViewModel by viewModels()
     private lateinit var phoneNumber: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

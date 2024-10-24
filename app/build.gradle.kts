@@ -42,6 +42,13 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
 
+
+        implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+
+        implementation ("androidx.fragment:fragment-ktx:1.6.0")
+
+
+
     implementation(libs.androidx.hdodenhof)
     implementation(libs.retrofit)
     implementation(libs.androidx.core.ktx)

@@ -65,7 +65,7 @@
             android:textColorHint="@color/black"
             android:textColor="@color/black" >
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_dob_text"
+                android:id="@+id/edit_fitness_level_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
