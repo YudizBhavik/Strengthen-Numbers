@@ -16,15 +16,27 @@ class OtpViewModel : ViewModel() {
     private val _otpResponse = MutableLiveData<ApiResponse?>()
     val otpResponse: LiveData<ApiResponse?> get() = _otpResponse
 
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage: LiveData<String?> get() = _errorMessage
+
     fun verifyOtp(otp: String, phoneNumber: String) {
         val request = OtpRequest(otp, phoneNumber)
-        repository.verifyOtp(request) { response ->
+        repository.verifyOtp(request) { response, errorMessage ->
             _apiResponse.postValue(response)
+            if (errorMessage != null) {
+                _errorMessage.postValue(errorMessage)
+            }
         }
     }
 
     fun requestOtp(phoneNumber: String) {
         repository.requestOtp(phoneNumber) { response ->
+            _otpResponse.postValue(response)
+        }
+    }
+
+    fun resendOtp(phoneNumber: String) {
+        repository.resendOtp(phoneNumber) { response ->
             _otpResponse.postValue(response)
         }
     }

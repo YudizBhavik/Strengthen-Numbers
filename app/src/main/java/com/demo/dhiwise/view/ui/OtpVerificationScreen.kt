@@ -9,7 +9,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -22,9 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
 import com.demo.dhiwise.R
-import com.demo.dhiwise.network.ApiResponse
 import com.demo.dhiwise.viewmodel.OtpViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -64,7 +61,6 @@ class OtpVerificationScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_otp_verification_screen)
-
         enableEdgeToEdge()
 
         btn_verify = findViewById(R.id.btn_verify)
@@ -110,57 +106,60 @@ class OtpVerificationScreen : AppCompatActivity() {
         progressBar = findViewById(R.id.progress_bar_verify)
 
         startTimer()
-        txtResend.setOnClickListener { startTimer() }
-
-//        viewModel.apiResponse.observe(this, Observer { response: ApiResponse? ->
-//            showProgressBar(false)
-//            response?.let {
-//                if (it.data != null) {
-//                    val successMessage = response.meta?.message
-//                    if (successMessage != null) {
-//                        showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)) {}
-//                    }
-//                } else {
-//                    Log.e("API Error", it.meta?.message ?: "Unknown error: ${response.toString()}")
-//
-//                    val errorMessage = response.meta?.message
-//                    if (errorMessage != null) {
-//                        showError(errorMessage)
-//                    }
-//                }
-//            } ?: run {
-//                val genericErrorMessage = "Unexpected error occurred."
-//                Log.e("API Error", genericErrorMessage)
-//                showError(genericErrorMessage)
-//            }
-//        })
+        txtResend.setOnClickListener {
+            viewModel.resendOtp(phoneNumber)
+            startTimer()
+        }
 
 
-        viewModel.apiResponse.observe(this, Observer { response: ApiResponse? ->
+        viewModel.apiResponse.observe(this) { response ->
             showProgressBar(false)
-            if (response != null){
-                val successMessage = response.meta?.message
-                if (successMessage != null){
-                    showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)){}
-                }
-                else{
-                    val unsuccessMessage = response.meta?.message
-                    if (unsuccessMessage == null){
-                        if (unsuccessMessage != null) {
-                            showErrorSnackbar(unsuccessMessage){}
-                        }
-                    }
-                }
+
+            if (response != null) {
+                response.meta?.message?.let { successMessage ->
+                    showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)) {}
+                } ?: showSnackbar("OTP verified successfully!", Intent(this, LocationPermissionScreen::class.java)) {}
+            } else {
+                viewModel.errorMessage.observe(this, { error ->
+                    error?.let { showErrorSnackbar(it) }
+                })
+                showErrorSnackbar("Response was null.")
             }
-        })
+        }
 
+        viewModel.otpResponse.observe(this) { response ->
+            if (response != null) {
+                response.meta?.message?.let { message ->
+                    showresendotpSnackbar(message) {}
+                } ?: showresendotpSnackbar("OTP resent successfully!") {}
+            } else {
+                showErrorSnackbar("Failed to resend OTP.")
+            }
+        }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main))
+
+        { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
     }
+
+    private fun showresendotpSnackbar(message: String, onDismissed: () -> Unit = {}) {
+        val snackbar = Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
+            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+            .setDuration(1500)
+            .setBackgroundTint(Color.parseColor("#5FB21A"))
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                onDismissed()
+            }
+        })
+        snackbar.show()
+    }
+
 
     private fun isOtpValid(): Boolean {
         return edit_otp_1.text.isNotEmpty() &&
@@ -210,11 +209,11 @@ class OtpVerificationScreen : AppCompatActivity() {
         })
         snackbar.show()
     }
-    private fun showErrorSnackbar(message: String, onDismissed: () -> Unit) {
+
+    private fun showErrorSnackbar(message: String, onDismissed: () -> Unit = {}) {
         val snackbar = Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-            .setDuration(1500)
-            .setBackgroundTint(Color.parseColor("#5FB21A"))
+            .setBackgroundTint(Color.parseColor("#FF0000")) // Change to red for error
         snackbar.addCallback(object : Snackbar.Callback() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                 super.onDismissed(transientBottomBar, event)

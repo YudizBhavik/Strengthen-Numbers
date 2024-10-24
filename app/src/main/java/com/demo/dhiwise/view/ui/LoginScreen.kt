@@ -29,7 +29,7 @@ class LoginScreen : AppCompatActivity() {
     private lateinit var btnContinue: MaterialButton
     private lateinit var tvErrorMessage: TextView
     private lateinit var progressBar: ProgressBar
-    private val prefix = "+1"
+    private val prefix = "+91"
     private var isPrefixShown = false
     private val otpViewModel: OtpViewModel by viewModels()
     private lateinit var phoneNumber: String
@@ -111,7 +111,7 @@ class LoginScreen : AppCompatActivity() {
     }
 
     private fun isValidPhoneNumber(phoneNumber: String): Boolean {
-        return phoneNumber.isNotEmpty() && phoneNumber.startsWith(prefix) && phoneNumber.length == 12
+        return phoneNumber.isNotEmpty() && phoneNumber.startsWith(prefix) && phoneNumber.length == 13
     }
 
     private fun displayErrorMessage(message: String?) {

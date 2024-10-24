@@ -65,7 +65,7 @@
             android:inputType="number"
             android:background="@android:color/transparent"
             android:hint="@string/txt_mobile_number"
-            android:maxLength="12"
+            android:maxLength="13"
             android:maxLines="1"
             android:paddingHorizontal="20dp"
             android:textColorHint="@color/black"

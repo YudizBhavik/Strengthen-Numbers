@@ -38,4 +38,8 @@ interface ApiService {
     @POST("verify-otp")
     fun verifyOtp(@Body request: OtpRequest): Call<ApiResponse>
 
+    @POST("resend-otp")
+    fun resendOtp(@Body request: OtpRequest): Call<ApiResponse>
+
+
 }
