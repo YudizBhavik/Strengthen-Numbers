@@ -1,5 +1,6 @@
 package com.demo.dhiwise.view.ui
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -118,7 +119,7 @@ class OtpVerificationScreen : AppCompatActivity() {
 
             if (response != null) {
                 val otpresponse = response.meta?.message
-                //token = result.headers().get("X-Authorization-Token").toString()
+
                 response.meta?.message?.let { successMessage ->
                     showSnackbar(successMessage, Intent(this, LocationPermissionScreen::class.java)) {}
                 } ?: showSnackbar("OTP verified successfully!", Intent(this, LocationPermissionScreen::class.java)) {}
@@ -129,6 +130,9 @@ class OtpVerificationScreen : AppCompatActivity() {
                 showErrorSnackbar("Response was null.")
             }
         }
+
+
+
 
         viewModel.otpResponse.observe(this) { response ->
             if (response != null) {

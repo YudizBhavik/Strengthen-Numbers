@@ -1,10 +1,14 @@
 package com.demo.dhiwise.network
 
 import com.demo.dhiwise.model.OtpRequest
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 import com.google.gson.annotations.SerializedName
+import retrofit2.Response
+import retrofit2.http.Header
+import retrofit2.http.Headers
 
 data class Data(
     @SerializedName("id") var id: Int? = null,
@@ -43,6 +47,8 @@ data class ProfileUpdateRequest(
 )
 
 interface ApiService {
+    @Headers("Content-Type: application/json")
+
     @POST("send-otp")
     fun requestOtp(@Body request: OtpRequest): Call<ApiResponse>
 
@@ -52,6 +58,8 @@ interface ApiService {
     @POST("resend-otp")
     fun resendOtp(@Body request: OtpRequest): Call<ApiResponse>
 
+    @Headers("Accept: application/json")
     @POST("edit-profile")
-    fun updateProfile(@Body request: ProfileUpdateRequest): Call<ApiResponse>
+    fun updateProfile(@Header("Authorization") token: String, @Body data : JsonObject) : Call<ApiResponse>
+
 }

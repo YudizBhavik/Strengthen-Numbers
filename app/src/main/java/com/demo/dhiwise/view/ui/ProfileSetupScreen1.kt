@@ -90,6 +90,11 @@ class ProfileSetupScreen1 : AppCompatActivity() {
                 view.setBackgroundColor(ContextCompat.getColor(this, R.color.S90))
             }
         }
+        if (currentStep == 1){
+            txt_btn_previous.visibility = View.INVISIBLE
+        }else{
+            txt_btn_previous.visibility = View.VISIBLE
+        }
 
         if (currentStep == 3) {
             nextButton.text = "Submit"
@@ -99,6 +104,8 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             profile_desc.text = "Please complete the fields below to set up your profile."
         }
     }
+
+
 
     private inner class ProfileSetupAdapter(fragmentActivity: AppCompatActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = 3

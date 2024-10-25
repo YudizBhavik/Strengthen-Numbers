@@ -36,10 +36,14 @@ class FragmentProfileSetup1 : Fragment() {
             showDatePicker()
         }
 
+        observeViewModel()
+        setupObservers()
+
+
         return view
     }
 
-//    internal fun getProfileData(): ProfileUpdateRequest? {
+    //    internal fun getProfileData(): ProfileUpdateRequest? {
 //        val fullName = editFullName.text.toString()
 //        val email = editEmail.text.toString()
 //        val dob = editDob.text.toString()
@@ -51,6 +55,7 @@ class FragmentProfileSetup1 : Fragment() {
 //            null
 //        }
 //    }
+
     internal fun updateProfile() {
         val fullName = editFullName.text.toString()
         val email = editEmail.text.toString()
@@ -58,7 +63,7 @@ class FragmentProfileSetup1 : Fragment() {
 
         if (fullName.isNotBlank() && email.isNotBlank() && dob.isNotBlank()) {
             val request = ProfileUpdateRequest(fullName, email, dob)
-//            otpViewModel.updateProfile(request)
+            otpViewModel.updateProfile(request)
         } else {
             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
@@ -66,9 +71,9 @@ class FragmentProfileSetup1 : Fragment() {
 
     private fun observeViewModel() {
         otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
-            response?.let {
+            if (response != null) {
                 Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-            } ?: run {
+            } else {
                 Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
             }
         }
@@ -81,6 +86,10 @@ class FragmentProfileSetup1 : Fragment() {
     }
 
 
+    private fun setupObservers() {
+        observeViewModel()
+    }
+
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -90,7 +99,7 @@ class FragmentProfileSetup1 : Fragment() {
         val datePickerDialog = DatePickerDialog(
             requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
-                val formattedDate = "$selectedDay/${selectedMonth + 1}/$selectedYear"
+                val formattedDate = "${selectedMonth + 1}-$selectedDay-$selectedYear"
                 editDob.setText(formattedDate)
             }, year, month, day
         )
