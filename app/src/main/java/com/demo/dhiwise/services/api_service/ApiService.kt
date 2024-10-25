@@ -45,6 +45,12 @@ data class ProfileUpdateRequest(
     val email: String,
     val dob: String
 )
+data class ProfileUpdateRequestF2(
+    val username: String,
+    val bio: String,
+    val gender: String,
+
+)
 
 interface ApiService {
     @Headers("Content-Type: application/json")

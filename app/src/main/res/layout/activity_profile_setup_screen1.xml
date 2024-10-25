@@ -96,6 +96,7 @@
             android:fontFamily="@font/manrope_semibold"
             android:text="@string/txt_previous"
             android:textAlignment="center"
+            android:visibility="gone"
             android:textColor="@color/text_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/btn_next_profile_1"

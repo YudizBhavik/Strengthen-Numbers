@@ -9,6 +9,7 @@ import com.demo.dhiwise.local.PreferencesManager
 import com.demo.dhiwise.model.OtpRequest
 import com.demo.dhiwise.network.ApiResponse
 import com.demo.dhiwise.network.ProfileUpdateRequest
+import com.demo.dhiwise.network.ProfileUpdateRequestF2
 import com.demo.dhiwise.repository.OtpRepository
 
 class OtpViewModel : ViewModel() {
@@ -53,6 +54,16 @@ class OtpViewModel : ViewModel() {
         val token = PreferencesManager.getToken()
         if (token != null) {
             repository.updateProfile(request, "Bearer " + token) { response ->
+                _apiResponse.postValue(response)
+            }
+        } else {
+            _errorMessage.postValue("Token not found.")
+        }
+    }
+    fun updateProfileF2(request: ProfileUpdateRequestF2) {
+        val token = PreferencesManager.getToken()
+        if (token != null) {
+            repository.updateProfileF2(request, "Bearer " + token) { response ->
                 _apiResponse.postValue(response)
             }
         } else {

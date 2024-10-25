@@ -6,6 +6,7 @@ import com.demo.dhiwise.local.PreferencesManager
 import com.demo.dhiwise.model.OtpRequest
 import com.demo.dhiwise.network.ApiResponse
 import com.demo.dhiwise.network.ProfileUpdateRequest
+import com.demo.dhiwise.network.ProfileUpdateRequestF2
 import com.demo.dhiwise.services.api_service.ApiClient
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -82,6 +83,26 @@ class OtpRepository {
     }
 
     fun updateProfile(request: ProfileUpdateRequest, token: String, callback: (ApiResponse?) -> Unit) {
+        val gson = Gson()
+        val jsonObject: JsonObject = gson.toJsonTree(request).asJsonObject
+
+        ApiClient.apiService.updateProfile("bareer" + token, jsonObject).enqueue(object : Callback<ApiResponse> {
+            override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                if (response.isSuccessful) {
+                    callback(response.body())
+                } else {
+                    Log.e("OtpRepository", "Error: ${response.code()} ${response.message()}")
+                    callback(null)
+                }
+            }
+
+            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.e("OtpRepository", "Failure: ${t.message}")
+                callback(null)
+            }
+        })
+    }
+    fun updateProfileF2(request: ProfileUpdateRequestF2, token: String, callback: (ApiResponse?) -> Unit) {
         val gson = Gson()
         val jsonObject: JsonObject = gson.toJsonTree(request).asJsonObject
 

@@ -17,10 +17,10 @@ import com.google.android.material.textfield.TextInputEditText
 class FragmentProfileSetup1 : Fragment() {
 
     private val otpViewModel: OtpViewModel by activityViewModels()
-
     private lateinit var editFullName: TextInputEditText
     private lateinit var editEmail: TextInputEditText
     private lateinit var editDob: TextInputEditText
+    internal var onProfileUpdateSuccess: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,25 +36,10 @@ class FragmentProfileSetup1 : Fragment() {
             showDatePicker()
         }
 
-        observeViewModel()
         setupObservers()
-
 
         return view
     }
-
-    //    internal fun getProfileData(): ProfileUpdateRequest? {
-//        val fullName = editFullName.text.toString()
-//        val email = editEmail.text.toString()
-//        val dob = editDob.text.toString()
-//
-//        return if (fullName.isNotBlank() && email.isNotBlank() && dob.isNotBlank()) {
-//            ProfileUpdateRequest(fullName, email, dob)
-//        } else {
-//            Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
-//            null
-//        }
-//    }
 
     internal fun updateProfile() {
         val fullName = editFullName.text.toString()
@@ -64,6 +49,14 @@ class FragmentProfileSetup1 : Fragment() {
         if (fullName.isNotBlank() && email.isNotBlank() && dob.isNotBlank()) {
             val request = ProfileUpdateRequest(fullName, email, dob)
             otpViewModel.updateProfile(request)
+            otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+                if (response != null) {
+                    Toast.makeText(context, "Profile updated successfully! updateProfile", Toast.LENGTH_SHORT).show()
+                    onProfileUpdateSuccess?.invoke()
+                } else {
+                    Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                }
+            }
         } else {
             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
         }
@@ -72,7 +65,8 @@ class FragmentProfileSetup1 : Fragment() {
     private fun observeViewModel() {
         otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
-                Toast.makeText(context, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Profile updated successfully! observeViewModel", Toast.LENGTH_SHORT).show()
+                onProfileUpdateSuccess?.invoke() // Notify the activity to go to the next fragment
             } else {
                 Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
             }
@@ -84,7 +78,6 @@ class FragmentProfileSetup1 : Fragment() {
             }
         }
     }
-
 
     private fun setupObservers() {
         observeViewModel()

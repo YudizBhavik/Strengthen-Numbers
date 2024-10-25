@@ -99,8 +99,7 @@ class LoginScreen : AppCompatActivity() {
                     displayErrorMessage("nexpected errorrrrrrr occurred. Please try again.")
                 }
             } else {
-                Log.e("LoginScreen", "OTP response is null.")
-                displayErrorMessage("Failed to send OTP. Please try again.")
+                response?.meta?.message
             }
         }
 

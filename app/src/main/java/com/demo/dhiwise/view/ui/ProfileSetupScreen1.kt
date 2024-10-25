@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.demo.dhiwise.R
-import com.demo.dhiwise.viewmodel.OtpViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -27,9 +26,9 @@ class ProfileSetupScreen1 : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var stepProgressBar: LinearLayout
     private lateinit var nextButton: MaterialButton
-    private lateinit var profile_title: TextView
-    private lateinit var profile_desc: TextView
-    private lateinit var txt_btn_previous: TextView
+    private lateinit var profileTitle: TextView
+    private lateinit var profileDesc: TextView
+    private lateinit var txtBtnPrevious: TextView
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,11 +41,11 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        nextButton = findViewById(R.id.btn_next_profile_1)
 
-        profile_title = findViewById(R.id.txt_profile_title)
-        profile_desc = findViewById(R.id.txt_profile_desc)
-        txt_btn_previous = findViewById(R.id.txt_btn_previous)
+        nextButton = findViewById(R.id.btn_next_profile_1)
+        profileTitle = findViewById(R.id.txt_profile_title)
+        profileDesc = findViewById(R.id.txt_profile_desc)
+        txtBtnPrevious = findViewById(R.id.txt_btn_previous)
 
         viewPager = findViewById(R.id.viewPager)
         viewPager.adapter = ProfileSetupAdapter(this)
@@ -55,23 +54,29 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         stepProgressBar = findViewById(R.id.stepProgressBar)
         updateStepProgress(1)
 
-
         nextButton.setOnClickListener {
             val currentItem = viewPager.currentItem
+
+            // Check if we are on Fragment 1
             if (currentItem == 0) {
-                val fragments: List<Fragment> = supportFragmentManager.fragments
-                val profileFragment = fragments[0] as FragmentProfileSetup1
-                profileFragment.updateProfile()
-            } else {
-                if (currentItem < 2) {
-                    viewPager.setCurrentItem(currentItem + 1, true)
-                }
+                val profileFragment1 = supportFragmentManager.fragments[0] as FragmentProfileSetup1
+                profileFragment1.updateProfile()  // Update profile in Fragment 1
             }
+            // Check if we are on Fragment 2
+            else if (currentItem == 1) {
+                val profileFragment2 = supportFragmentManager.fragments[1] as FragmentProfileSetup2
+                profileFragment2.updateProfile()  // Update profile in Fragment 2
+            }
+
+            // Move to the next fragment only if we are not on the last fragment
+            if (currentItem < 3) {
+                viewPager.setCurrentItem(currentItem + 1, true)
+            }
+
             onFragmentChanged(viewPager.currentItem)
         }
 
-
-        txt_btn_previous.setOnClickListener {
+        txtBtnPrevious.setOnClickListener {
             val currentItem = viewPager.currentItem
             if (currentItem > 0) {
                 viewPager.setCurrentItem(currentItem - 1, true)
@@ -84,36 +89,33 @@ class ProfileSetupScreen1 : AppCompatActivity() {
     private fun updateStepProgress(currentStep: Int) {
         for (i in 0 until stepProgressBar.childCount) {
             val view = stepProgressBar.getChildAt(i)
-            if (i < currentStep) {
-                view.setBackgroundColor(ContextCompat.getColor(this, R.color.p60))
+            view.setBackgroundColor(if (i < currentStep) {
+                ContextCompat.getColor(this, R.color.p60)
             } else {
-                view.setBackgroundColor(ContextCompat.getColor(this, R.color.S90))
-            }
+                ContextCompat.getColor(this, R.color.S90)
+            })
         }
-        if (currentStep == 1){
-            txt_btn_previous.visibility = View.INVISIBLE
-        }else{
-            txt_btn_previous.visibility = View.VISIBLE
-        }
+        txtBtnPrevious.visibility = if (currentStep == 1) View.INVISIBLE else View.VISIBLE
 
-        if (currentStep == 3) {
-            nextButton.text = "Submit"
-            profile_desc.text = "Choose minimum 3 interests."
-        } else {
-            nextButton.text = "Next"
-            profile_desc.text = "Please complete the fields below to set up your profile."
-        }
+        nextButton.text = if (currentStep == 3) "Submit" else "Next"
+        profileDesc.text = if (currentStep == 3) "Choose minimum 3 interests." else "Please complete the fields below to set up your profile."
     }
-
-
 
     private inner class ProfileSetupAdapter(fragmentActivity: AppCompatActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> FragmentProfileSetup1()
-                1 -> FragmentProfileSetup2()
+                0 -> FragmentProfileSetup1().apply {
+                    onProfileUpdateSuccess = {
+                        onFragmentChanged(viewPager.currentItem)
+                    }
+                }
+                1 -> FragmentProfileSetup2().apply {
+                    onProfileUpdateSuccess = {
+                        onFragmentChanged(viewPager.currentItem)
+                    }
+                }
                 else -> FragmentProfileSetup3()
             }
         }
@@ -141,8 +143,7 @@ class ProfileSetupScreen1 : AppCompatActivity() {
     private fun hideKeyboard() {
         val view: View? = this.currentFocus
         if (view != null) {
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
@@ -150,10 +151,6 @@ class ProfileSetupScreen1 : AppCompatActivity() {
     private fun showProgressBar(show: Boolean) {
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
         nextButton.isEnabled = !show
-        if (show) {
-            nextButton.text = ""
-        } else {
-            nextButton.text = getString(R.string.btn_txt_next)
-        }
+        nextButton.text = if (show) "" else getString(R.string.btn_txt_next)
     }
 }
