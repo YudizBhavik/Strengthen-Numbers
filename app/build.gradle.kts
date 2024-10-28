@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.demo.dhiwise"
+    namespace = "com.sn.bhavik"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.demo.dhiwise"
+        applicationId = "com.sn.bhavik"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

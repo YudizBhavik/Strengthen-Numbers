@@ -29,9 +29,6 @@
             android:name=".view.ui.ProfileSetupScreen1"
             android:exported="false" />
         <activity
-            android:name=".view.ui.LocationPermissionScreen"
-            android:exported="false" />
-        <activity
             android:name=".view.ui.OtpVerificationScreen"
             android:exported="false" />
         <activity
