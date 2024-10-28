@@ -53,41 +53,35 @@ class ProfileSetupScreen1 : AppCompatActivity() {
 
         stepProgressBar = findViewById(R.id.stepProgressBar)
         updateStepProgress(1)
+
         nextButton.setOnClickListener {
-            nextButton.setOnClickListener {
-                val currentItem = viewPager.currentItem
+            val currentItem = viewPager.currentItem
 
-                when (currentItem) {
-                    0 -> {
-                        val profileFragment1 =
-                            supportFragmentManager.fragments[0] as FragmentProfileSetup1
-                        profileFragment1.updateProfile()
-                        viewPager.setCurrentItem(1, true)
-                    }
-
-                    1 -> {
-                        val profileFragment2 =
-                            supportFragmentManager.fragments[1] as FragmentProfileSetup2
-                        profileFragment2.updateProfile() // Call updateProfile() here if necessary
-                        viewPager.setCurrentItem(2, true)
-                    }
-
-                    2 -> {
-                        val profileFragment3 =
-                            supportFragmentManager.fragments[2] as FragmentProfileSetup3
-                        profileFragment3.updateProfile() // Call updateProfile
-
-                        val intent = Intent(this, HomeScreen::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
+            val canProceed = when (currentItem) {
+                0 -> {
+                    val profileFragment1 = supportFragmentManager.fragments[0] as FragmentProfileSetup1
+                    profileFragment1.updateProfile() // Assuming this returns a Boolean
                 }
-
-                onFragmentChanged(viewPager.currentItem)
+                1 -> {
+                    val profileFragment2 = supportFragmentManager.fragments[1] as FragmentProfileSetup2
+                    profileFragment2.updateProfile() // Assuming this returns a Boolean
+                }
+                2 -> {
+                    val profileFragment3 = supportFragmentManager.fragments[2] as FragmentProfileSetup3
+                    profileFragment3.updateProfile() // Assuming this returns a Boolean
+                }
+                else -> false
             }
+
+//            if (canProceed) {
+//                viewPager.setCurrentItem(currentItem + 1, true)
+//                onFragmentChanged(viewPager.currentItem)
+//            } else {
+//                showSnackbar("Please complete the required fields.", null)
+//            }
         }
 
-            txtBtnPrevious.setOnClickListener {
+        txtBtnPrevious.setOnClickListener {
             val currentItem = viewPager.currentItem
             if (currentItem > 0) {
                 viewPager.setCurrentItem(currentItem - 1, true)
@@ -136,18 +130,10 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         updateStepProgress(position + 1)
     }
 
-    private fun showSnackbar(message: String, intent: Intent, onDismissed: () -> Unit) {
+    private fun showSnackbar(message: String, intent: Intent?) {
         val snackbar = Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-            .setDuration(1500)
             .setBackgroundTint(Color.parseColor("#5FB21A"))
-        snackbar.addCallback(object : Snackbar.Callback() {
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                super.onDismissed(transientBottomBar, event)
-                startActivity(intent)
-                onDismissed()
-            }
-        })
         snackbar.show()
     }
 

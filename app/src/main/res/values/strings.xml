@@ -45,4 +45,14 @@
     <string name="txt_choose_minimum_3">Choose minimum 3 interests.</string>
     <string name="txt_fitness_level">Fitness Level</string>
     <string name="txt_previous">Previous</string>
+
+    //errors
+        <string name="error_required_name">Please enter valid name</string>
+        <string name="error_required_email">Please enter valid email</string>
+        <string name="error_required_dob">Please enter valid Date of birth</string>
+        <string name="error_required_checkbox">Please confirm you are agree with all terms and conditions</string>
+
+
+
+
 </resources>
