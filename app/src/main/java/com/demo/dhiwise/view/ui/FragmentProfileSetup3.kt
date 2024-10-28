@@ -1,19 +1,32 @@
 package com.demo.dhiwise.view.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.GridView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.demo.dhiwise.R
 import com.demo.dhiwise.model.Interest
+import com.demo.dhiwise.network.ProfileUpdateRequestF3
 import com.demo.dhiwise.view.adapter.GridviewAdapter
+import com.demo.dhiwise.viewmodel.OtpViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 
 class FragmentProfileSetup3 : Fragment() {
 
     private lateinit var gridView: GridView
     private lateinit var adapter: GridviewAdapter
+    private var selectedFitnessLevel: String? = null
+
+    private val otpViewModel: OtpViewModel by activityViewModels()
 
     private val interests = listOf(
         Interest(R.drawable.gym, R.drawable.gym_selected, "Strength Training"),
@@ -27,7 +40,6 @@ class FragmentProfileSetup3 : Fragment() {
         Interest(R.drawable.cardio, R.drawable.cardio_selected, "HIIT")
     )
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile_setup3, container, false)
 
@@ -35,6 +47,66 @@ class FragmentProfileSetup3 : Fragment() {
         adapter = GridviewAdapter(requireContext(), interests)
         gridView.adapter = adapter
 
+
+        val fitnessLevelEditText: TextInputEditText = view.findViewById(R.id.edit_fitness_level_text)
+        fitnessLevelEditText.setOnClickListener {
+            showFitnessLevelBottomSheet(fitnessLevelEditText)
+        }
+
         return view
     }
+
+    private fun showFitnessLevelBottomSheet(editText: TextInputEditText) {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val bottomSheetView = layoutInflater.inflate(R.layout.fitness_bottomsheet, null)
+
+        val beginner: TextView = bottomSheetView.findViewById(R.id.text_beginner)
+        val intermediate: TextView = bottomSheetView.findViewById(R.id.text_intermediate)
+        val advanced: TextView = bottomSheetView.findViewById(R.id.text_advanced)
+
+        beginner.setOnClickListener {
+            selectedFitnessLevel = "beginner"
+            editText.setText(selectedFitnessLevel) // Update this line
+            bottomSheetDialog.dismiss()
+        }
+
+        intermediate.setOnClickListener {
+            selectedFitnessLevel = "intermediate"
+            editText.setText(selectedFitnessLevel) // Update this line
+            bottomSheetDialog.dismiss()
+        }
+
+        advanced.setOnClickListener {
+            selectedFitnessLevel = "advanced"
+            editText.setText(selectedFitnessLevel) // Update this line
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
+    }
+
+    internal fun updateProfile() {
+        val selectedInterests = adapter.getSelectedInterests()
+
+        if (selectedFitnessLevel.isNullOrBlank()) {
+            Toast.makeText(context, "Please enter your fitness level", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (selectedInterests.size < 3) {
+            Toast.makeText(context, "Please select at least 3 interests", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Log.d("UpdateProfile", "Selected Fitness Level: $selectedFitnessLevel") // Log fitness level
+        Log.d("UpdateProfile", "Selected Interests: $selectedInterests")
+
+        val request = ProfileUpdateRequestF3(selectedFitnessLevel!!, selectedInterests)
+
+        Log.d("UpdateProfile", "Request: $request")
+        otpViewModel.updateProfileF3(request)
+    }
+
 }
+

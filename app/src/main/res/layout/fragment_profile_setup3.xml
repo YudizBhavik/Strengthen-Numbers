@@ -24,7 +24,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/linear_edittext_email"
+        android:id="@+id/linear_edittext_fitness"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:background="@drawable/style_edittext"
@@ -70,6 +70,7 @@
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:drawableEnd="@drawable/down_arrow"
+                android:focusable="false"
                 android:paddingEnd="15dp"
                 />
         </com.google.android.material.textfield.TextInputLayout>

@@ -66,7 +66,7 @@ class FragmentProfileSetup1 : Fragment() {
         otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
 //                Toast.makeText(context, "Profile updated successfully! observeViewModel", Toast.LENGTH_SHORT).show()
-                onProfileUpdateSuccess?.invoke() // Notify the activity to go to the next fragment
+                onProfileUpdateSuccess?.invoke()
             } else {
                 Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT).show()
             }

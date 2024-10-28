@@ -53,30 +53,41 @@ class ProfileSetupScreen1 : AppCompatActivity() {
 
         stepProgressBar = findViewById(R.id.stepProgressBar)
         updateStepProgress(1)
-
         nextButton.setOnClickListener {
-            val currentItem = viewPager.currentItem
+            nextButton.setOnClickListener {
+                val currentItem = viewPager.currentItem
 
-            // Check if we are on Fragment 1
-            if (currentItem == 0) {
-                val profileFragment1 = supportFragmentManager.fragments[0] as FragmentProfileSetup1
-                profileFragment1.updateProfile()  // Update profile in Fragment 1
-            }
-            // Check if we are on Fragment 2
-            else if (currentItem == 1) {
-                val profileFragment2 = supportFragmentManager.fragments[1] as FragmentProfileSetup2
-                profileFragment2.updateProfile()  // Update profile in Fragment 2
-            }
+                when (currentItem) {
+                    0 -> {
+                        val profileFragment1 =
+                            supportFragmentManager.fragments[0] as FragmentProfileSetup1
+                        profileFragment1.updateProfile()
+                        viewPager.setCurrentItem(1, true)
+                    }
 
-            // Move to the next fragment only if we are not on the last fragment
-            if (currentItem < 3) {
-                viewPager.setCurrentItem(currentItem + 1, true)
-            }
+                    1 -> {
+                        val profileFragment2 =
+                            supportFragmentManager.fragments[1] as FragmentProfileSetup2
+                        profileFragment2.updateProfile() // Call updateProfile() here if necessary
+                        viewPager.setCurrentItem(2, true)
+                    }
 
-            onFragmentChanged(viewPager.currentItem)
+                    2 -> {
+                        val profileFragment3 =
+                            supportFragmentManager.fragments[2] as FragmentProfileSetup3
+                        profileFragment3.updateProfile() // Call updateProfile
+
+                        val intent = Intent(this, HomeScreen::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+
+                onFragmentChanged(viewPager.currentItem)
+            }
         }
 
-        txtBtnPrevious.setOnClickListener {
+            txtBtnPrevious.setOnClickListener {
             val currentItem = viewPager.currentItem
             if (currentItem > 0) {
                 viewPager.setCurrentItem(currentItem - 1, true)

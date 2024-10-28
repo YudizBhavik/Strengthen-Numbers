@@ -51,6 +51,11 @@ data class ProfileUpdateRequestF2(
     val gender: String,
 
 )
+data class ProfileUpdateRequestF3(
+    @SerializedName("fitness_level") val fitnessLevel: String,
+    val interests: List<String>
+)
+
 
 interface ApiService {
     @Headers("Content-Type: application/json")
