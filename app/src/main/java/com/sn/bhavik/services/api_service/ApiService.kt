@@ -6,6 +6,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 import com.google.gson.annotations.SerializedName
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 
@@ -71,5 +72,9 @@ interface ApiService {
     @Headers("Accept: application/json")
     @POST("edit-profile")
     fun updateProfile(@Header("Authorization") token: String, @Body data : JsonObject) : Call<ApiResponse>
+
+    @Headers("Accept: application/json")
+    @POST("user-profile")
+    fun getProfile(@Header("Authorization") token: String, @Body data : JsonObject ): Call<ApiResponse> // Retain the same function signature
 
 }

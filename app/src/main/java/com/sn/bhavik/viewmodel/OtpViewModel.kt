@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.sn.bhavik.local.PreferencesManager
 import com.sn.bhavik.model.OtpRequest
 import com.sn.bhavik.network.ApiResponse
@@ -11,6 +13,11 @@ import com.sn.bhavik.network.ProfileUpdateRequest
 import com.sn.bhavik.network.ProfileUpdateRequestF2
 import com.sn.bhavik.network.ProfileUpdateRequestF3
 import com.sn.bhavik.repository.OtpRepository
+import com.sn.bhavik.services.api_service.ApiClient.apiService
+import kotlinx.coroutines.launch
+import okhttp3.Callback
+import retrofit2.Call
+import retrofit2.Response
 
 class OtpViewModel : ViewModel() {
     private val repository = OtpRepository()
@@ -81,6 +88,23 @@ class OtpViewModel : ViewModel() {
         }
     }
 
+
+//    fun getProfile(token: String, requestBody: JsonObject) {
+//        apiService.getProfile(token).enqueue(object : Callback<ApiResponse> {
+//             fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+//                if (response.isSuccessful) {
+//                    _apiResponse.value = response.body()
+//                } else {
+//                    _apiResponse.value = "Error: ${response.message()}"
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+//                errorMessage.value = "Failed to fetch profile: ${t.message}"
+//            }
+//        })
+//    }
 
 
 }

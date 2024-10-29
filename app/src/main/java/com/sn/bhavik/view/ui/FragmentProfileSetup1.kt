@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.sn.bhavik.R
 import com.sn.bhavik.network.ProfileUpdateRequest
 import com.sn.bhavik.viewmodel.OtpViewModel
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
 
 data class ValidationResult(val isValid: Boolean, val errorMessages: Map<String, String>)
 
@@ -43,13 +44,44 @@ class FragmentProfileSetup1 : Fragment() {
             showDatePicker()
         }
 
+        fetchUserProfile()
+
         setupObservers()
 
         return view
     }
 
-    internal fun updateProfile(): Boolean {
-        clearErrorMessages() // Clear previous error messages
+    private fun fetchUserProfile() {
+        val token = "your_auth_token" // Replace this with your actual token retrieval logic
+        val requestBody = JsonObject() // Create an empty JSON object if no parameters are needed
+
+//        otpViewModel.getProfile(token, requestBody) // Modify to use your ViewModel
+    }
+
+    private fun setupObservers() {
+        observeViewModel()
+
+        otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("ProfileSetup", "API Response: $response")
+
+                response.data?.let { userData ->
+                    Log.d("ProfileSetup", "User Data: $userData")
+                    editFullName.setText(userData.name)
+                    editEmail.setText(userData.email)
+                    editDob.setText(userData.dob)
+                    onProfileUpdateSuccess?.invoke()
+                    showSnackbar("User Details fetched successfully!")
+                } ?: showErrorSnackbar("User data not found in response.")
+            } else {
+                showErrorSnackbar("Failed to fetch profile")
+            }
+        }
+    }
+
+
+    fun updateProfile(): Boolean {
+        clearErrorMessages()
 
         val fullName = editFullName.text.toString()
         val email = editEmail.text.toString()
@@ -58,17 +90,15 @@ class FragmentProfileSetup1 : Fragment() {
         val validationResult = validateInputs(fullName, email, dob)
 
         if (validationResult.isValid) {
-            // Perform the update request here
             val request = ProfileUpdateRequest(fullName, email, dob)
             otpViewModel.updateProfile(request)
 
-            return true // Indicate that the update process has started
+            return true
         } else {
-            // Show error messages
             validationResult.errorMessages.forEach { (field, message) ->
                 showError(field, message)
             }
-            return false // Indicate that validation failed
+            return false
         }
     }
 
@@ -134,9 +164,7 @@ class FragmentProfileSetup1 : Fragment() {
         }
     }
 
-    private fun setupObservers() {
-        observeViewModel()
-    }
+
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
@@ -173,6 +201,4 @@ class FragmentProfileSetup1 : Fragment() {
         }
         snackbar?.show()
     }
-
-
 }
