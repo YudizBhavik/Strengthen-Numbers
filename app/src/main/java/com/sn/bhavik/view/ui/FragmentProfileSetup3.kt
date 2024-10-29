@@ -45,7 +45,6 @@ class FragmentProfileSetup3 : Fragment() {
         adapter = GridviewAdapter(requireContext(), interests)
         gridView.adapter = adapter
 
-
         val fitnessLevelEditText: TextInputEditText = view.findViewById(R.id.edit_fitness_level_text)
         fitnessLevelEditText.setOnClickListener {
             showFitnessLevelBottomSheet(fitnessLevelEditText)
@@ -64,19 +63,19 @@ class FragmentProfileSetup3 : Fragment() {
 
         beginner.setOnClickListener {
             selectedFitnessLevel = "beginner"
-            editText.setText(selectedFitnessLevel) // Update this line
+            editText.setText(selectedFitnessLevel)
             bottomSheetDialog.dismiss()
         }
 
         intermediate.setOnClickListener {
             selectedFitnessLevel = "intermediate"
-            editText.setText(selectedFitnessLevel) // Update this line
+            editText.setText(selectedFitnessLevel)
             bottomSheetDialog.dismiss()
         }
 
         advanced.setOnClickListener {
             selectedFitnessLevel = "advanced"
-            editText.setText(selectedFitnessLevel) // Update this line
+            editText.setText(selectedFitnessLevel)
             bottomSheetDialog.dismiss()
         }
 
@@ -84,27 +83,28 @@ class FragmentProfileSetup3 : Fragment() {
         bottomSheetDialog.show()
     }
 
-    internal fun updateProfile() {
+    internal fun updateProfile(): Boolean {
         val selectedInterests = adapter.getSelectedInterests()
 
+        // Validation
         if (selectedFitnessLevel.isNullOrBlank()) {
             Toast.makeText(context, "Please enter your fitness level", Toast.LENGTH_SHORT).show()
-            return
+            return false
         }
 
         if (selectedInterests.size < 3) {
             Toast.makeText(context, "Please select at least 3 interests", Toast.LENGTH_SHORT).show()
-            return
+            return false
         }
 
-        Log.d("UpdateProfile", "Selected Fitness Level: $selectedFitnessLevel") // Log fitness level
+        Log.d("UpdateProfile", "Selected Fitness Level: $selectedFitnessLevel")
         Log.d("UpdateProfile", "Selected Interests: $selectedInterests")
 
         val request = ProfileUpdateRequestF3(selectedFitnessLevel!!, selectedInterests)
 
         Log.d("UpdateProfile", "Request: $request")
         otpViewModel.updateProfileF3(request)
+
+        return true
     }
-
 }
-

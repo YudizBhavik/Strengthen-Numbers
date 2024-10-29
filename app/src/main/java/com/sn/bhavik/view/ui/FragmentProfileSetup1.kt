@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.sn.bhavik.R
@@ -48,39 +49,28 @@ class FragmentProfileSetup1 : Fragment() {
     }
 
     internal fun updateProfile(): Boolean {
+        clearErrorMessages() // Clear previous error messages
+
         val fullName = editFullName.text.toString()
         val email = editEmail.text.toString()
         val dob = editDob.text.toString()
 
-        var isValid = true
+        val validationResult = validateInputs(fullName, email, dob)
 
-        // Validate full name
-        if (fullName.isBlank()) {
-            isValid = false
-            Toast.makeText(context, R.string.error_required_name, Toast.LENGTH_SHORT).show()
-        }
-
-        // Validate email
-        if (email.isBlank()) {
-            isValid = false
-            Toast.makeText(context, R.string.error_required_email, Toast.LENGTH_SHORT).show()
-        }
-
-        // Validate date of birth
-        if (dob.isBlank()) {
-            isValid = false
-            Toast.makeText(context, R.string.error_required_dob, Toast.LENGTH_SHORT).show()
-        }
-
-        if (isValid) {
-            // Optionally, perform the update request here
+        if (validationResult.isValid) {
+            // Perform the update request here
             val request = ProfileUpdateRequest(fullName, email, dob)
             otpViewModel.updateProfile(request)
+
+            return true // Indicate that the update process has started
+        } else {
+            // Show error messages
+            validationResult.errorMessages.forEach { (field, message) ->
+                showError(field, message)
+            }
+            return false // Indicate that validation failed
         }
-
-        return isValid
     }
-
 
     private fun validateInputs(fullName: String, email: String, dob: String): ValidationResult {
         val errorMessages = mutableMapOf<String, String>()
@@ -183,4 +173,6 @@ class FragmentProfileSetup1 : Fragment() {
         }
         snackbar?.show()
     }
+
+
 }

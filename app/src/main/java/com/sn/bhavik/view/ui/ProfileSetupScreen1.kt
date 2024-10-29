@@ -56,30 +56,31 @@ class ProfileSetupScreen1 : AppCompatActivity() {
 
         nextButton.setOnClickListener {
             val currentItem = viewPager.currentItem
-
             val canProceed = when (currentItem) {
                 0 -> {
                     val profileFragment1 = supportFragmentManager.fragments[0] as FragmentProfileSetup1
-                    profileFragment1.updateProfile() // Assuming this returns a Boolean
+                    profileFragment1.updateProfile() // Should return Boolean
                 }
                 1 -> {
                     val profileFragment2 = supportFragmentManager.fragments[1] as FragmentProfileSetup2
-                    profileFragment2.updateProfile() // Assuming this returns a Boolean
+                    profileFragment2.updateProfile() // Should return Boolean
                 }
                 2 -> {
                     val profileFragment3 = supportFragmentManager.fragments[2] as FragmentProfileSetup3
-                    profileFragment3.updateProfile() // Assuming this returns a Boolean
+                    profileFragment3.updateProfile() // Should return Boolean
                 }
                 else -> false
             }
 
-//            if (canProceed) {
-//                viewPager.setCurrentItem(currentItem + 1, true)
-//                onFragmentChanged(viewPager.currentItem)
-//            } else {
-//                showSnackbar("Please complete the required fields.", null)
-//            }
+            if (canProceed) {
+                viewPager.setCurrentItem(currentItem + 1, true)
+                onFragmentChanged(viewPager.currentItem)
+            } else {
+                showSnackbar("Please complete the required fields.")
+            }
         }
+
+
 
         txtBtnPrevious.setOnClickListener {
             val currentItem = viewPager.currentItem
@@ -101,7 +102,6 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             })
         }
         txtBtnPrevious.visibility = if (currentStep == 1) View.INVISIBLE else View.VISIBLE
-
         nextButton.text = if (currentStep == 3) "Submit" else "Next"
         profileDesc.text = if (currentStep == 3) "Choose minimum 3 interests." else "Please complete the fields below to set up your profile."
     }
@@ -130,7 +130,7 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         updateStepProgress(position + 1)
     }
 
-    private fun showSnackbar(message: String, intent: Intent?) {
+    private fun showSnackbar(message: String) {
         val snackbar = Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
             .setBackgroundTint(Color.parseColor("#5FB21A"))

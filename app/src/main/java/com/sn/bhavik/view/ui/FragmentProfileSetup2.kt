@@ -44,9 +44,9 @@ class FragmentProfileSetup2 : Fragment() {
 
         editUsername = view.findViewById(R.id.edit_user_name_text)
         editGender = view.findViewById(R.id.edit_txt_gender)
-        editBio = view.findViewById(R.id.edit_bio_text) // Change to the correct EditText
+        editBio = view.findViewById(R.id.edit_bio_text)
 
-        imgProfileSetup = view.findViewById(R.id.img_profile_setup2) // Ensure this is initialized
+        imgProfileSetup = view.findViewById(R.id.img_profile_setup2)
 
         editGender.setOnClickListener { showGenderSelectionBottomSheet() }
         imgProfileSetup.setOnClickListener { showImageSelectBottomSheet() }
@@ -56,19 +56,38 @@ class FragmentProfileSetup2 : Fragment() {
         return view
     }
 
-    internal fun updateProfile() {
+    internal fun updateProfile(): Boolean {
         val username = editUsername.text.toString()
-        val bio = editBio.text.toString() // Changed to reflect bio instead of email
+        val bio = editBio.text.toString()
 
-        if (username.isNotBlank() && bio.isNotBlank() && selectedGender!!.isNotBlank()) {
-            Log.d("Update Profile", "updateProfile: $editUsername")
-            Log.d("Update Profile", "updateProfile: $editBio")
+        if (validateInputs(username, bio, selectedGender)) {
+            Log.d("Update Profile", "updateProfile: $username")
+            Log.d("Update Profile", "updateProfile: $bio")
             Log.d("Update Profile", "updateProfile: $selectedGender")
             val request = ProfileUpdateRequestF2(username, bio, selectedGender!!)
             otpViewModel.updateProfileF2(request)
+            return true
         } else {
             Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+            return false
         }
+    }
+
+    private fun validateInputs(username: String, bio: String, gender: String?): Boolean {
+        var isValid = true
+        if (username.isBlank()) {
+            editUsername.error = "Username is required"
+            isValid = false
+        }
+        if (bio.isBlank()) {
+            editBio.error = "Bio is required"
+            isValid = false
+        }
+        if (gender.isNullOrBlank()) {
+            editGender.error = "Gender is required"
+            isValid = false
+        }
+        return isValid
     }
 
     private fun observeViewModel() {
