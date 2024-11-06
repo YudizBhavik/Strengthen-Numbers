@@ -13,9 +13,8 @@ import com.sn.bhavik.R
 
 class GridviewAdapter(
     private val context: Context,
-    private val interests: List<Interest>
+    private var interests: List<Interest>
 ) : BaseAdapter() {
-    private val selectedItems = mutableSetOf<Int>()
 
     override fun getCount(): Int = interests.size
 
@@ -30,24 +29,29 @@ class GridviewAdapter(
         val iconImageView: ImageView = view.findViewById(R.id.icon_intrest)
         val titleTextView: TextView = view.findViewById(R.id.title_intrest)
 
-        iconImageView.setImageResource(if (selectedItems.contains(position)) interest.selectedImageResId else interest.imageResId)
+        // Show the selected image if the item is selected, otherwise show the unselected image
+        iconImageView.setImageResource(if (interest.isSelected) interest.selectedImageResId else interest.imageResId)
         titleTextView.text = interest.text
-        titleTextView.setTextColor(if (selectedItems.contains(position)) Color.WHITE else Color.BLACK)
-        view.setBackgroundResource(if (selectedItems.contains(position)) R.drawable.grid_profile_selected else R.drawable.grid_profile)
+        titleTextView.setTextColor(if (interest.isSelected) Color.WHITE else Color.BLACK)
+        view.setBackgroundResource(if (interest.isSelected) R.drawable.grid_profile_selected else R.drawable.grid_profile)
 
+        // Handle item click to toggle selection
         view.setOnClickListener {
-            if (selectedItems.contains(position)) {
-                selectedItems.remove(position)
-            } else {
-                selectedItems.add(position)
-            }
+            interest.isSelected = !interest.isSelected
             notifyDataSetChanged()
         }
 
         return view
     }
 
+    // Get a list of selected interests
     fun getSelectedInterests(): List<String> {
-        return selectedItems.map { interests[it].text }
+        return interests.filter { it.isSelected }.map { it.text }
+    }
+
+    // Update the interest list, e.g., after getting profile data
+    fun updateInterests(newInterests: List<Interest>) {
+        interests = newInterests
+        notifyDataSetChanged()
     }
 }

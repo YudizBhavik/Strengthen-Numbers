@@ -2,6 +2,7 @@ package com.sn.bhavik.view.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -17,8 +18,12 @@ import androidx.fragment.app.activityViewModels
 import com.sn.bhavik.network.ProfileUpdateRequestF2
 import com.sn.bhavik.viewmodel.OtpViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.JsonObject
 import com.sn.bhavik.R
+import com.sn.bhavik.local.PreferencesManager
 
 class FragmentProfileSetup2 : Fragment() {
 
@@ -56,6 +61,55 @@ class FragmentProfileSetup2 : Fragment() {
         return view
     }
 
+
+    private fun validateInputs(username: String, bio: String, gender: String?): Boolean {
+        var isValid = true
+        if (username.isBlank()) {
+            editUsername.error = "Username is required"
+            isValid = false
+        }
+        if (bio.isBlank()) {
+            editBio.error = "Bio is required"
+            isValid = false
+        }
+        // Check if gender is blank only if it hasn't been set from the API
+        if (gender.isNullOrBlank() && selectedGender.isNullOrBlank()) {
+            editGender.error = "Gender is required"
+            isValid = false
+        }
+        return isValid
+    }
+
+    private fun setupObservers() {
+        otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                Log.d("ProfileSetup", "API Response: $response")
+                response.data?.let { userData ->
+                    Log.d("ProfileSetup", "User Data: $userData")
+                    editUsername.setText(userData.username)
+                    selectedGender = userData.gender // Set the fetched gender
+                    editGender.setText(selectedGender)
+                    editBio.setText(userData.bio)
+                    onProfileUpdateSuccess?.invoke()
+                }
+            } else {
+                showErrorSnackbar("Failed to fetch profile")
+            }
+        }
+
+        otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val successMessage = response.meta?.message ?: "Profile updated successfully!"
+                Log.d("Response", response.data.toString())
+//                showSnackbar(successMessage)
+            } else {
+                showErrorSnackbar("Response was null.")
+            }
+        }
+    }
+
+
+
     internal fun updateProfile(): Boolean {
         val username = editUsername.text.toString()
         val bio = editBio.text.toString()
@@ -73,21 +127,23 @@ class FragmentProfileSetup2 : Fragment() {
         }
     }
 
-    private fun validateInputs(username: String, bio: String, gender: String?): Boolean {
-        var isValid = true
-        if (username.isBlank()) {
-            editUsername.error = "Username is required"
-            isValid = false
+
+    private fun showSnackbar(message: String) {
+        val snackbar = view?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                .setBackgroundTint(Color.parseColor("#5FB21A"))
         }
-        if (bio.isBlank()) {
-            editBio.error = "Bio is required"
-            isValid = false
+        snackbar?.show()
+    }
+
+    private fun showErrorSnackbar(message: String) {
+        val snackbar = view?.let {
+            Snackbar.make(it, message, Snackbar.LENGTH_SHORT)
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                .setBackgroundTint(Color.parseColor("#FF0000"))
         }
-        if (gender.isNullOrBlank()) {
-            editGender.error = "Gender is required"
-            isValid = false
-        }
-        return isValid
+        snackbar?.show()
     }
 
     private fun observeViewModel() {
@@ -107,9 +163,6 @@ class FragmentProfileSetup2 : Fragment() {
         }
     }
 
-    private fun setupObservers() {
-        observeViewModel()
-    }
 
     private fun showGenderSelectionBottomSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())

@@ -141,27 +141,24 @@ class OtpRepository {
             }
         })
     }
-
-    fun getProfile(callback: (ApiResponse?, String?) -> Unit) {
-        val token = PreferencesManager.getToken()
-        if (token.isNullOrEmpty()) {
-            callback(null, "Token is missing.")
-            return
-        }
-
-        ApiClient.apiService.getProfile("Bearer $token").enqueue(object : Callback<ApiResponse> {
+    fun getProfile(token: String, requestBody: JsonObject, callback: (ApiResponse?, String?) -> Unit) {
+        ApiClient.apiService.getProfile(token, requestBody).enqueue(object : Callback<ApiResponse> {
             override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
                 if (response.isSuccessful) {
                     callback(response.body(), null)
                 } else {
                     val errorBody = response.errorBody()?.string()
+                    Log.e("OtpRepository", "Error: ${response.code()} ${response.message()} - Body: $errorBody")
+
                     val errorResponse = Gson().fromJson(errorBody, ApiResponse::class.java)
                     val errorMessage = errorResponse.meta?.message ?: "An unknown error occurred."
+
                     callback(null, errorMessage)
                 }
             }
 
             override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                Log.e("OtpRepository", "Failure: ${t.message}")
                 callback(null, t.message)
             }
         })

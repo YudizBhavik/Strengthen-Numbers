@@ -80,7 +80,7 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         }
         txtBtnPrevious.visibility = if (currentStep == 1) View.INVISIBLE else View.VISIBLE
         nextButton.text = if (currentStep == 3) "Submit" else "Next"
-        profileDesc.text = if (currentStep == 3) "Choose minimum 3 interests." else "Please complete the fields below to set up your profile."
+                profileDesc.text = if (currentStep == 3) "Choose minimum 3 interests." else "Please complete the fields below to set up your profile."
     }
 
     private fun handleNextButtonClick() {
@@ -92,11 +92,10 @@ class ProfileSetupScreen1 : AppCompatActivity() {
             else -> false
         }
 
+
         if (canProceed) {
             viewPager.setCurrentItem(currentItem + 1, true)
             onFragmentChanged(viewPager.currentItem)
-        } else {
-            showSnackbar("Please complete the required fields.")
         }
     }
 
@@ -112,25 +111,10 @@ class ProfileSetupScreen1 : AppCompatActivity() {
         updateStepProgress(position + 1)
     }
 
-    private fun showSnackbar(message: String) {
-        Snackbar.make(findViewById(R.id.main), message, Snackbar.LENGTH_SHORT)
-            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-            .setBackgroundTint(Color.parseColor("#5FB21A"))
-            .show()
-    }
-
-    private fun hideKeyboard() {
-        val view: View? = this.currentFocus
-        if (view != null) {
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
-    private fun showProgressBar(show: Boolean) {
-        nextButton.isEnabled = !show
-        nextButton.text = if (show) "" else getString(R.string.btn_txt_next)
-    }
+//    private fun showProgressBar(show: Boolean) {
+//        nextButton.isEnabled = !show
+//        nextButton.text = if (show) "" else getString(R.string.btn_txt_next)
+//    }
 
     private inner class ProfileSetupAdapter(fragmentActivity: AppCompatActivity) : FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int = 3

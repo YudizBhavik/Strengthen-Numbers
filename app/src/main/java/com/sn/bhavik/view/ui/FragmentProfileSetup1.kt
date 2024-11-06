@@ -8,10 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.sn.bhavik.R
@@ -19,6 +21,7 @@ import com.sn.bhavik.network.ProfileUpdateRequest
 import com.sn.bhavik.viewmodel.OtpViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
+import com.sn.bhavik.local.PreferencesManager
 
 data class ValidationResult(val isValid: Boolean, val errorMessages: Map<String, String>)
 
@@ -28,6 +31,8 @@ class FragmentProfileSetup1 : Fragment() {
     private lateinit var editFullName: TextInputEditText
     private lateinit var editEmail: TextInputEditText
     private lateinit var editDob: TextInputEditText
+    private lateinit var checkBox1: MaterialCheckBox  // Change to CheckBox
+    private lateinit var checkBox2: MaterialCheckBox  // Change to CheckBox
     internal var onProfileUpdateSuccess: (() -> Unit)? = null
 
     override fun onCreateView(
@@ -39,28 +44,31 @@ class FragmentProfileSetup1 : Fragment() {
         editFullName = view.findViewById(R.id.edit_full_name_text)
         editEmail = view.findViewById(R.id.edit_email_text)
         editDob = view.findViewById(R.id.edit_dob_text)
+        checkBox1 = view.findViewById(R.id.t_c_checkBox1) // Initialize your checkbox
+        checkBox2 = view.findViewById(R.id.year_plus_checkBox) // Initialize your checkbox
 
         editDob.setOnClickListener {
             showDatePicker()
         }
 
         fetchUserProfile()
-
         setupObservers()
 
         return view
     }
 
     private fun fetchUserProfile() {
-        val token = "your_auth_token" // Replace this with your actual token retrieval logic
-        val requestBody = JsonObject() // Create an empty JSON object if no parameters are needed
-
-//        otpViewModel.getProfile(token, requestBody) // Modify to use your ViewModel
+        val token = PreferencesManager.getToken()
+        Log.d("Token Fetch", "fetchUserProfile: $token")
+        if (token != null) {
+            val requestBody = JsonObject()
+            otpViewModel.getProfile(requestBody)
+        } else {
+            showErrorSnackbar("Authentication token is missing.")
+        }
     }
 
     private fun setupObservers() {
-        observeViewModel()
-
         otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
             if (response != null) {
                 Log.d("ProfileSetup", "API Response: $response")
@@ -71,14 +79,21 @@ class FragmentProfileSetup1 : Fragment() {
                     editEmail.setText(userData.email)
                     editDob.setText(userData.dob)
                     onProfileUpdateSuccess?.invoke()
-                    showSnackbar("User Details fetched successfully!")
-                } ?: showErrorSnackbar("User data not found in response.")
+                }
             } else {
                 showErrorSnackbar("Failed to fetch profile")
             }
         }
-    }
 
+        otpViewModel.apiResponse.observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                val successMessage = response.meta?.message ?: "Profile updated successfully!"
+                Log.d("Response", response.data.toString())
+            } else {
+                showErrorSnackbar("Response was null.")
+            }
+        }
+    }
 
     fun updateProfile(): Boolean {
         clearErrorMessages()
@@ -86,13 +101,18 @@ class FragmentProfileSetup1 : Fragment() {
         val fullName = editFullName.text.toString()
         val email = editEmail.text.toString()
         val dob = editDob.text.toString()
-
         val validationResult = validateInputs(fullName, email, dob)
+        val isCheckbox1Checked = checkBox1.isChecked
+        val isCheckbox2Checked = checkBox2.isChecked
+        if (!isCheckbox1Checked || !isCheckbox2Checked) {
+            showErrorSnackbar("Please agree to the terms and conditions")
+            return false
+        }
 
         if (validationResult.isValid) {
             val request = ProfileUpdateRequest(fullName, email, dob)
             otpViewModel.updateProfile(request)
-
+            observeViewModel()
             return true
         } else {
             validationResult.errorMessages.forEach { (field, message) ->
@@ -159,12 +179,10 @@ class FragmentProfileSetup1 : Fragment() {
 
         otpViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             }
         }
     }
-
-
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()

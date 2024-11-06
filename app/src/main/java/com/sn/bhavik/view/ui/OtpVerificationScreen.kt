@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -58,6 +59,7 @@ class OtpVerificationScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_otp_verification_screen)
+        enableEdgeToEdge()
 
         btn_verify = findViewById(R.id.btn_verify)
         edit_otp_1 = findViewById(R.id.edit_otp_1)
@@ -83,7 +85,7 @@ class OtpVerificationScreen : AppCompatActivity() {
             if (isOtpValid()) {
                 hideKeyboard()
                 showProgressBar(true)
-
+                clearErrorMessages()
                 val otp = "${edit_otp_1.text}${edit_otp_2.text}${edit_otp_3.text}${edit_otp_4.text}"
                 viewModel.verifyOtp(otp, phoneNumber)
             } else {
@@ -99,6 +101,10 @@ class OtpVerificationScreen : AppCompatActivity() {
 
         setupObservers()
         setupWindowInsets()
+    }
+
+    private fun clearErrorMessages() {
+        findViewById<TextView>(R.id.tv_error_message)?.visibility = View.GONE
     }
 
     private fun setupPhoneNumberMessage(phoneNumber: String) {
@@ -119,7 +125,12 @@ class OtpVerificationScreen : AppCompatActivity() {
                 val successMessage = response.meta?.message ?: "OTP verified successfully!"
                 val res = response.data
                 Log.d("Responnseee", res.toString())
-                showSnackbar(successMessage, Intent(this, ProfileSetupScreen1::class.java)) {}
+
+                if (isProfileSetupComplete()) {
+                    showSnackbar(successMessage, Intent(this, HomeScreen::class.java)) {}
+                } else {
+                    showSnackbar(successMessage, Intent(this, ProfileSetupScreen1::class.java)) {}
+                }
             } else {
                 showErrorSnackbar("Response was null.")
             }
@@ -133,6 +144,12 @@ class OtpVerificationScreen : AppCompatActivity() {
                 showErrorSnackbar("Failed to resend OTP.")
             }
         }
+    }
+
+    private fun isProfileSetupComplete(): Boolean {
+
+        val sharedPrefs = getSharedPreferences("app_preferences", MODE_PRIVATE)
+        return sharedPrefs.getBoolean("is_profile_setup_complete", false)
     }
 
     private fun isOtpValid(): Boolean {
@@ -175,6 +192,7 @@ class OtpVerificationScreen : AppCompatActivity() {
                 super.onDismissed(transientBottomBar, event)
                 startActivity(intent)
                 onDismissed()
+                finish()
             }
         })
         snackbar.show()

@@ -89,23 +89,19 @@ class OtpViewModel : ViewModel() {
     }
 
 
-//    fun getProfile(token: String, requestBody: JsonObject) {
-//        apiService.getProfile(token).enqueue(object : Callback<ApiResponse> {
-//             fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
-//                if (response.isSuccessful) {
-//                    _apiResponse.value = response.body()
-//                } else {
-//                    _apiResponse.value = "Error: ${response.message()}"
-//
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-//                errorMessage.value = "Failed to fetch profile: ${t.message}"
-//            }
-//        })
-//    }
-
+    fun getProfile(requestBody: JsonObject) {
+        val token = PreferencesManager.getToken()
+        if (token != null) {
+            repository.getProfile("Bearer $token", requestBody) { response, errorMessage ->
+                _apiResponse.postValue(response)
+                if (errorMessage != null) {
+                    _errorMessage.postValue(errorMessage)
+                }
+            }
+        } else {
+            _errorMessage.postValue("Token not found.")
+        }
+    }
 
 }
 

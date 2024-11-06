@@ -14,6 +14,7 @@ data class Data(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("email") var email: String? = null,
+    @SerializedName("username") var username: String? = null,
     @SerializedName("contact_number") var contactNumber: String? = null,
     @SerializedName("dob") var dob: String? = null,
     @SerializedName("bio") var bio: String? = null,
@@ -33,12 +34,16 @@ data class Data(
 
 data class Meta(
     @SerializedName("message") var message: String? = null
+
+
 )
 
 data class ApiResponse(
+
     @SerializedName("data") var data: Data? = Data(),
     @SerializedName("meta") var meta: Meta? = Meta()
 )
+
 
 data class ProfileUpdateRequest(
     val fullName: String,
