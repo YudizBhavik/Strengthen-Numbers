@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.LoginScreen">
+
+    <TextView
+        android:id="@+id/txt_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/txt_account"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/H4"
+        android:fontFamily="@font/manrope_semibold"/>
+
+    <TextView
+        android:id="@+id/txt_enter_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_enter_mobile_proceed"
+        app:layout_constraintTop_toBottomOf="@+id/txt_account"
+        app:layout_constraintStart_toStartOf="@id/txt_account"
+        app:layout_constraintEnd_toEndOf="@id/txt_account"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/text_color_t30"
+        android:textSize="@dimen/regular_text_size"
+        android:fontFamily="@font/manrope_semibold"/>
+
+    <LinearLayout
+        android:id="@+id/linear_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/style_edittext"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_enter_phone_number"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:src="@drawable/call_light"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/style_line"/>
+
+        <EditText
+            android:id="@+id/edit_mobile_number"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:fontFamily="@font/manrope_regular"
+            android:inputType="number"
+            android:background="@android:color/transparent"
+            android:hint="@string/txt_mobile_number"
+            android:maxLength="13"
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:textColorHint="@color/black"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_edittext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_continue"
+        android:layout_width="343dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:text="@string/btn_txt_continue"
+        android:backgroundTint="@color/S19"
+        app:cornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_error_message" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintTop_toTopOf="@id/btn_continue"
+        app:layout_constraintBottom_toBottomOf="@id/btn_continue"
+        app:layout_constraintEnd_toEndOf="@id/btn_continue"
+        app:layout_constraintStart_toStartOf="@id/btn_continue" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Dhiwise" parent="Theme.Material3.DayNight.NoActionBar">
+       <item name="buttonStyle">@drawable/style_button</item>
+
+    </style>
+    <style name="CustomCheckbox02" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:buttonTint">@drawable/check_box_selector</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.Dhiwise" parent="Base.Theme.Dhiwise" />
+</resources>

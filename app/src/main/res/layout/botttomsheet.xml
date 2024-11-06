@@ -1,0 +1,34 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+
+        <TextView
+            android:id="@+id/text_male"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="male"
+            android:padding="16dp"
+            android:textAlignment="center"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/text_female"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="female"
+            android:padding="16dp"
+            android:textAlignment="center"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintStart_toStartOf="@+id/text_male"
+            app:layout_constraintTop_toBottomOf="@id/text_male"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

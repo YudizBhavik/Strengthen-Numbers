@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">Strengthen Numbers</string>
+
+    //Button Text
+
+    <string name="btn_txt_next">Next</string>
+    <string name="btn_txt_continue">Continue</string>
+    <string name="btn_txt_skip">Skip</string>
+    <string name="btn_verify">Verify</string>
+
+    //TextView Text
+    <string name="txt_title1_experience_culture">Experience the Culture</string>
+    <string name="txt_title_2post_workout">Post Workouts, Tips &amp;\n Progress</string>
+    <string name="txt_title_3join_fitness">Join Fitness events</string>
+    <string name="txt_desc_1join_community">Join the community that will fuel your passion for health and fitness by supporting each steps of your journey</string>
+    <string name="txt_desc_2motivate_inspire">Motivate and inspire others by sharing workouts, tips and tricks, or progress updates with pictures and videos. Feel free to draw some inspiration from others doing the same</string>
+    <string name="txt_desc_3attending_group">Whether its attending a local group event, traveling out of state to a big seminar, or inviting friends to go through that tough workout with you, the events page will help you achieve your goals</string>
+    <string name="txt_title">Title</string>
+    <string name="txt_description">Description</string>
+    <string name="txt_account">Account</string>
+    <string name="txt_enter_mobile_proceed">Enter your mobile number to proceed</string>
+    <string name="txt_mobile_number">Mobile Number</string>
+    <string name="txt_otp_verification">OTP Verification</string>
+    <string name="txt_send_code">We have sent the verification code to your\n$my number$ mobile number.</string>
+    <string name="didn_t_receive_code">Didn’t receive OTP? 30 seconds</string>
+    <string name="txt_resend_otp">Resend OTP</string>
+    <string name="txt_allow_access_nlocation">Allow access to your\nlocation</string>
+    <string name="txt_location_line1">Discover nearby fitness events and group workouts happening in your area.</string>
+    <string name="txt_location_line2">Find friends who are crushing their goals near you.</string>
+    <string name="btn_txt_don_t_allow">Don\'t Allow</string>
+    <string name="btn_txt_allow">Allow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_profile_setup">Profile Setup</string>
+    <string name="txt_complete_the_fields">Please complete the fields below to set up your profile.</string>
+    <string name="txt_full_name">Full Name</string>
+    <string name="txt_email">Email</string>
+    <string name="txt_date_of_birth">Date of Birth</string>
+    <string name="txt_username">Username</string>
+    <string name="txt_gender">Gender</string>
+    <string name="txt_bio">Bio</string>
+    <string name="txt_upload_profile">Upload Profile Picture</string>
+    <string name="txt_i_agree_TC"><![CDATA[I agree all terms & conditions.]]></string>
+    <string name="txt_18plus_old">Yes I am 18+ years old.</string>
+    <string name="txt_choose_minimum_3">Choose minimum 3 interests.</string>
+    <string name="txt_fitness_level">Fitness Level</string>
+    <string name="txt_previous">Previous</string>
+
+    //errors
+        <string name="error_required_name">Please enter valid name</string>
+        <string name="error_required_email">Please enter valid email</string>
+        <string name="error_required_dob">Please enter valid Date of birth</string>
+        <string name="error_required_checkbox">Please confirm you are agree with all terms and conditions</string>
+
+
+
+
+</resources>

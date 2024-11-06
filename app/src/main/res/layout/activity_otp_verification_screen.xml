@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.ui.OtpVerificationScreen">
+
+    <ImageButton
+        android:id="@+id/back_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/back_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/txt_otp_verify"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/manrope_bold"
+        android:text="@string/txt_otp_verification"
+        android:textAlignment="center"
+        android:textSize="@dimen/H5"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/back_icon"
+        tools:ignore="TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/txt_sent_the_code"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_otp_verify"
+        android:fontFamily="@font/manrope_regular"
+        android:textSize="@dimen/regular_text_size"
+        android:text="@string/txt_send_code"/>
+
+    <EditText
+        android:id="@+id/edit_otp_1"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/style_editotp"
+        android:focusable="true"
+        android:gravity="center"
+        android:inputType="number"
+        android:maxLength="1"
+        android:maxLines="1"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/txt_otp_verify"
+        app:layout_constraintTop_toBottomOf="@id/txt_sent_the_code"
+        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/edit_otp_2"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/style_editotp"
+        android:focusable="true"
+        android:inputType="number"
+        android:maxLength="1"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/edit_otp_1"
+        app:layout_constraintTop_toTopOf="@id/edit_otp_1"
+        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/edit_otp_3"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/style_editotp"
+        android:focusable="true"
+        android:inputType="number"
+        android:maxLength="1"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/edit_otp_2"
+        app:layout_constraintTop_toTopOf="@id/edit_otp_1"
+        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/edit_otp_4"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/style_editotp"
+        android:focusable="true"
+        android:inputType="number"
+        android:maxLength="1"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/edit_otp_3"
+        app:layout_constraintTop_toTopOf="@id/edit_otp_1"
+        tools:ignore="Autofill,LabelFor,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/tv_error_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintTop_toBottomOf="@id/edit_otp_1"
+        app:layout_constraintStart_toStartOf="@id/edit_otp_1"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+
+        />
+
+    <TextView
+        android:id="@+id/txt_did_not_received"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/tv_error_message"
+        app:layout_constraintStart_toStartOf="@id/edit_otp_1"
+        app:layout_constraintEnd_toEndOf="@id/edit_otp_4"
+        android:fontFamily="@font/manrope_regular"
+        android:textSize="@dimen/regular_text_size"
+        android:text="@string/didn_t_receive_code"/>
+
+    <TextView
+        android:id="@+id/txt_resend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:enabled="false"
+        android:focusable="true"
+        android:fontFamily="@font/manrope_semibold"
+        android:text="@string/txt_resend_otp"
+        android:textAlignment="center"
+        android:textSize="@dimen/regular_text_size"
+        app:layout_constraintEnd_toEndOf="@id/edit_otp_4"
+        app:layout_constraintStart_toStartOf="@id/edit_otp_1"
+        app:layout_constraintTop_toBottomOf="@id/txt_did_not_received"
+        tools:ignore="TouchTargetSizeCheck" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_verify"
+        android:layout_width="343dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/manrope_semibold"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/btn_verify"
+        android:backgroundTint="@color/S19"
+        app:cornerRadius="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_resend"
+        tools:ignore="VisualLintButtonSize" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_verify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"
+        app:layout_constraintTop_toTopOf="@id/btn_verify"
+        app:layout_constraintBottom_toBottomOf="@id/btn_verify"
+        app:layout_constraintEnd_toEndOf="@id/btn_verify"
+        app:layout_constraintStart_toStartOf="@id/btn_verify" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
